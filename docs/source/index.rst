@@ -25,7 +25,7 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` `is defined `below<getPage>`_:
+The two failure cases are handled like this (the implementation of ``getPage`` `is defined below <getPage>`_:
 
 .. code-block:: java
    :linenos:
