@@ -1,9 +1,9 @@
 The Darien Project
 ==================
 
-The failure library makes handling Java code failure easy. It's well-known that error-handling code is buggy [1]. By making handling errors more convenient, you can focus on both code paths to build better, working code more quickly.
+The Darien Project for Java code makes handling Java code failure easy. It's well-known that error-handling code is buggy [1]. By using the library, you can easily focus on the failure path to build better, working code more quickly.
 
-`The failure library is available here <https://github.com/jh-evans/failure-a>`_ This should be a maven reference, not to the source code.
+.. _A reference here to the Maven repository
 
 .. quickStart:
 Quick Start
@@ -27,7 +27,7 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` `is defined below in getPage_:
+The two failure cases are handled like this (the implementation of ``getPage`` is defined below in getPage_):
 
 .. code-block:: java
    :linenos:
@@ -224,22 +224,3 @@ Resources
 
 | \[1\] `The original LinkedIn article <https://www.linkedin.com/pulse/failure-subtype-success-huw-evans/>`_
 | \[2\] `Baeldung.com <https://www.baeldung.com/java-switch-pattern-matching>`_, `Oracle Help Center <https://docs.oracle.com/en/java/javase/17/language/pattern-matching.html#GUID-A59EF0C7-4CB7-4555-986D-0FD804555C25>`_
-
-This is the Slate Githubs Pages Theme
--------------------------------------
-
-See `the README.md file at the pages-theme repository <https://github.com/pages-themes/slate/>`_
-
-To use the Slate theme:
-
-1. Add the following to your site's ``_config.yml``:
-
-    .. code-block:: yml
-       remote_theme: pages-themes/slate@v0.2.0
-       plugins:
-       - jekyll-remote-theme # add this line to the plugins list if you already have one
-
-2. Optionally, if you'd like to preview your site on your computer, add the following to your site's `Gemfile`:
-
-    .. code-block:: ruby
-       gem "github-pages", group: :jekyll_plugins
