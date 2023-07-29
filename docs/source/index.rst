@@ -193,9 +193,9 @@ By focusing on failure, we can see that:
 1. Any method parameter can cause your code to fail
 2. Any code that searches for something can fail
 
-One way to handle point 1. is to use pre-conditions and appropriately return a failure instance.
+One way to handle point 1. is to use pre-conditions and return an appropriate failure instance.
 
-Code that searches for an item is quite common. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
+Code that searches for an item in one way or another is quite common. a search mail fail as the otem cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
 .. code-block:: java
   :linenos:
