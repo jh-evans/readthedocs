@@ -17,13 +17,15 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
    :emphasize-lines: 1
    :name: code-ref-name
 
-public static void main(String[] args) {
-    Main m = new Main();
-    Success<String> page = m.getPage("https://www.example.com"); // HTTP GET a webpage as a String
+   public static void main(String[] args) {
+       Main m = new Main();
+       Success<String> page = m.getPage("https://www.example.com"); // HTTP GET a webpage as a String
 
-    if(page.eval()) {
-        System.out.println("The success path");
-    } else {
-        System.out.println("The failure path");
-    }
-}
+       if(page.eval()) {
+           System.out.println("The success path");
+       } else {
+           System.out.println("The failure path");
+       }
+   }
+
+This is more text
