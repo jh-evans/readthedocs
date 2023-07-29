@@ -16,7 +16,9 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
 
    public static void main(String[] args) {
        Main m = new Main();
-       Success<String> page = m.getPage("https://www.example.com"); // GET a webpage as a String
+
+       // When called like this, GETs a webpage as a String
+       Success<String> page = m.getPage("https://www.example.com");
 
        if(page.eval()) {
            System.out.println("The success path");
@@ -25,7 +27,7 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` `is defined below <getPage>`_:
+The two failure cases are handled like this (the implementation of ``getPage`` `is defined below <getPage>`_):
 
 .. code-block:: java
    :linenos:
@@ -33,7 +35,7 @@ The two failure cases are handled like this (the implementation of ``getPage`` `
    public static void main(String[] argv) {
        Main m = new Main();
 
-       // When calaled like this, getPage returns a FailureValue, wrapping 404
+       // When called like this, getPage returns a FailureValue, wrapping 404
        Success<String> page = m.getPage("https://www.example.com/nosuchpage");
    
        if(page.eval()) {
