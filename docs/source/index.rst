@@ -6,8 +6,8 @@ The failure library makes handling Java code failure easy. It's well-known that 
 `The failure library is available here <https://github.com/jh-evans/failure-a>`_ This should be a maven reference, not to the source code.
 
 .. quickStart:
-Quickstart
-----------
+Quick Start
+-----------
 
 The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET might return a status value outside the 200 to 299 success range, or ``getPage`` might encounter an exception. Either way, the failure path will be executed.
 
@@ -27,7 +27,7 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` `is defined below <getPage>`_):
+The two failure cases are handled like this (the implementation of ``getPage`` `is defined below in getPage_:
 
 .. code-block:: java
    :linenos:
@@ -35,8 +35,8 @@ The two failure cases are handled like this (the implementation of ``getPage`` `
    public static void main(String[] argv) {
        Main m = new Main();
 
-       // When called like this, getPage returns a FailureValue, wrapping 404
-       Success<String> page = m.getPage("https://www.example.com/nosuchpage");
+       // When called like this,  returns a FailureValue, wrapping 404
+       Success<String> page = m.("https://www.example.com/nosuchpage");
    
        if(page.eval()) {
            System.out.println("Success");
@@ -53,15 +53,15 @@ The ``switch`` on ``page`` above is an example of pattern matching, released in 
 
 Attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 being returned, passed back wrapped in a ``FailureValue``.
 
-When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an instance of ``FailureException``.
+When passed ``https://www.cannotfindthisdomain.com``, ```` returns an instance of ``FailureException``.
 
 .. code-block:: java
    :linenos:
    public static void main(String[] argv) {
        Main m = new Main();
 
-      // When called like this, getPage returns an instance of FailureException
-       Success<String> page = m.getPage("https://www.cannotfindthisdomain.com");
+      // When called like this,  returns an instance of FailureException
+       Success<String> page = m.("https://www.cannotfindthisdomain.com");
    
        if(page.eval()) {
            System.out.println("Success");
@@ -102,10 +102,10 @@ The Detail
 
 All subtypes of ``Failure`` override ``eval`` to return ``false`` so your failure handling code passes through the ``else`` above.
 
-``Failure`` extends ``Success`` for the same type ``T`` so that ``Failure`` subtypes can be passed back wherever an instance of ``Success`` is expected (`see ``getPage`` <getPage>`_).
+``Failure`` extends ``Success`` for the same type ``T`` so that ``Failure`` subtypes can be returned wherever an instance of ``Success`` is expected.
 
-The failure-describing types below (such as ``FailureValue``) are wrappers around an instance associated with the failure, such as a value or exception. This is because in the failure case, the instance
-of type T is not used as T is associated with a successful operation. However, for Java type correctness, ``Failure`` must be typed from ``T``. 
+The failure-describing types below (such as ``FailureValue``) are wrappers around an instance associated with the failure, such as a value or exception. This is because, in the failure case, the instance
+of type T is not used; T is associated with a successful operation. However, for Java type correctness, ``Failure`` must be typed from ``T``. 
 
 ``FailureValue`` is defined as:
 
@@ -178,9 +178,9 @@ Using Interfaces
 ----------------
 
 You will note that ``Success``, ``Failure``, and all the failure-describing types, are Java interfaces. You use these types when _using_ the failure library, as a consumer, as in the ``main`` methods
-in QuickStart_.
+in quickStart_.
 
-When you write your code to make use of the failure library (as a producer of success and failure) you use an implementation of these types as you can see in `getPage <getPage>`_ (e.g., ``SuccessImpl``).
+When you write your code to make use of the failure library (as a producer of success and failure) you use an implementation of these types as you can see in getPage_ (such as ``SuccessImpl``).
 
 As an engineer, you reason about success and failure using the types and implement those types to give them concrete meaning at run-time. In this design, classes are purely a mechanism for
 expressing code and its reuse.
