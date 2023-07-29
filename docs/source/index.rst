@@ -53,7 +53,7 @@ The ``switch`` on ``page`` above is an example of pattern matching, released in 
 
 Attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 being returned, passed back wrapped in a ``FailureValue``.
 
-When passed ``https://www.cannotfindthisdomain.com``, ```` returns an instance of ``FailureException``.
+When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an instance of ``FailureException``.
 
 .. code-block:: java
    :linenos:
@@ -74,15 +74,15 @@ When passed ``https://www.cannotfindthisdomain.com``, ```` returns an instance o
        }
    }
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see `The Detail <theDetail>`_ below), a subtype of ``Success``. ``Success`` defines ``eval`` which returns ``true``. ``eval`` on ``Failure`` and its subtypes return ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch. That is it. Easy.
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see theDetail_ below), whicch in turn is a subtype of ``Success``. ``Success`` defines ``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch. That is it. Easy.
 
-This approach focuses on the different kinds of failure, cleanly separating the various cases, without over-focusing on success and forgetting to deal with failure.
+This approach focuses on the different kinds of failure, cleanly separating the various cases.
 
 .. theDetail:
 The Detail
 ----------
 
-``Success`` is a type that wraps an instance of ``T``. ``unwrap`` returns the instance. ``eval`` returns ``true`` so your code will travel down the success path.
+``Success`` is a generic type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``.
 
 .. code-block:: java
    :linenos:
@@ -100,12 +100,10 @@ The Detail
    public interface Failure<T> extends Success<T> {
    }
 
-All subtypes of ``Failure`` override ``eval`` to return ``false`` so your failure handling code passes through the ``else`` above.
-
-``Failure`` extends ``Success`` for the same type ``T`` so that ``Failure`` subtypes can be returned wherever an instance of ``Success`` is expected.
+All subtypes of ``Failure`` override ``eval`` to return ``false``.
 
 The failure-describing types below (such as ``FailureValue``) are wrappers around an instance associated with the failure, such as a value or exception. This is because, in the failure case, the instance
-of type T is not used; T is associated with a successful operation. However, for Java type correctness, ``Failure`` must be typed from ``T``. 
+of type T is not used; T is associated with a successful operation. However, for Java type correctness, ``Failure<T>`` must be written. 
 
 ``FailureValue`` is defined as:
 
@@ -116,9 +114,9 @@ of type T is not used; T is associated with a successful operation. However, for
        public Number getValue();
    }
 
-``FailureValue`` wraps a ``Number`` which is useful when an operation has failed and a code value is to be associated with that failure, as in the HTTP GET 404 above.
+``FailureValue`` wraps a ``Number``. This type is useful when an operation has failed and a code value is to be associated with that failure, as in the HTTP GET 404 above.
 
-``FailureException`` wraps an exception:
+``FailureException`` wraps an exception in the same way:
 
 .. code-block:: java
    :linenos:
@@ -133,8 +131,6 @@ of type T is not used; T is associated with a successful operation. However, for
 
 When ``url`` is ``https://www.cannotfindthisdomain.com``, ``getPage`` will return a ``FailureException`` that will wrap the thrown ``java.net.UnknownHostException``.
 When ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a ``FailureValue`` that will wrap the number 404.
-
-You can update ``getPage`` to more explicitly handle the other error cases when ``url`` is malformed or null.
 
 .. code-block:: java
    :linenos:
@@ -174,16 +170,17 @@ You can update ``getPage`` to more explicitly handle the other error cases when 
        }
    }
 
+In fact, ``getPage`` looks perfectly reasonable, but the ``url`` passed in may be null or it may contain a malformed URL. In addition, the author of ``getPage`` may decide that any use of ``http`` should be rejected as only ``https`` is to be supported for security reasons.
+
 Using Interfaces
 ----------------
 
-You will note that ``Success``, ``Failure``, and all the failure-describing types, are Java interfaces. You use these types when _using_ the failure library, as a consumer, as in the ``main`` methods
+You will note that ``Success``, ``Failure``, and all the failure-describing types, are Java interfaces. You use these types when *using* the library, as a consumer, as in the ``main`` methods
 in quickStart_.
 
-When you write your code to make use of the failure library (as a producer of success and failure) you use an implementation of these types as you can see in getPage_ (such as ``SuccessImpl``).
+When you base your code on the library, as a producer of success and failure cases, you use an *implementation* of these types as you can see in getPage_ (such as ``SuccessImpl``).
 
-As an engineer, you reason about success and failure using the types and implement those types to give them concrete meaning at run-time. In this design, classes are purely a mechanism for
-expressing code and its reuse.
+As an engineer, you reason about success and failure and how to handle these cases using the types. You give these types concrete meaning at run-time by using the ``Impl`` classes. In this code design, classes are purely a mechanism for expressing code and its reuse.
 
 Focusing on Failure Leads to More Robust Code
 ---------------------------------------------
@@ -191,9 +188,12 @@ Focusing on Failure Leads to More Robust Code
 By focusing on failure, we can see that:
 
 1. Any method parameter can cause your code to fail
-2. Any code that searches for something can fail
+2. All code paths are terminated at a ``return``
+3. Any code that searches for something can fail
 
-One way to handle point 1. is to use pre-conditions and return an appropriate failure instance.
+One way to address the first point is to use pre-conditions and return an appropriate failure instance.
+
+For point 2., this approach catches exceptions and returns them as a ``FailureException``. This style is preferred over throwing an exception out of the current method as this might be a long way from the point of generation, reducing mediation options. However, doing this is a matter of style and preference. There is nuance here.
 
 Code that searches for an item in one way or another is quite common. a search mail fail as the otem cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
@@ -204,7 +204,7 @@ Code that searches for an item in one way or another is quite common. a search m
        return input.split("-")[1];
    }
 
-If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` is ``hyphenated``, an ``ArrayIndexOutOfBoundsException`` will be raised. This addresses that problem:
+If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` is ``hyphenated``, an ``ArrayIndexOutOfBoundsException`` will be raised. This code addresses the problem:
 
 .. code-block:: java
    :linenos:
@@ -217,7 +217,7 @@ If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` 
        }
    }
 
-The above code is an improvement but it doesn't handle all error cases, e.g., ``input`` might be ``null``.
+The above code is an improvement but it doesn't handle all error cases, e.g., ``input`` might be ``null`` or a character set test may be required before the split on the hyphen is executed.
 
 Resources
 ---------
