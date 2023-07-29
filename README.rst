@@ -1,3 +1,5 @@
+Lumache has its documentation hosted on Read the Docs.
+
 Template for the Read the Docs tutorial
 =======================================
 
