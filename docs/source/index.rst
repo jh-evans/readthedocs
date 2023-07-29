@@ -1,16 +1,19 @@
-The failure library
-===================
+The Darien Project
+==================
 
 The failure library makes handling Java code failure easy. It's well-known that error-handling code is buggy [1]. By making handling errors more convenient, you can focus on both code paths to build better, working code more quickly.
 
-`The failure library is available here <https://github.com/jh-evans/failure-a>`_ 
+`The failure library is available here <https://github.com/jh-evans/failure-a>`_ This should be a maven reference, not to the source code.
 
-<a name="quickStart"></a>
-## Quickstart
+.. quickStart:
+Quickstart
+----------
 
 The call to `m.getPage` below may fail in two ways: its internal HTTP GET might return a status value outside the 200 to 299 success range, or `getPage` might encounter an exception. Either way, the failure path will be executed.
 
-```java
+.. code-block:: java
+  :linenos:
+
 public static void main(String[] args) {
     Main m = new Main();
     Success<String> page = m.getPage("https://www.example.com"); // HTTP GET a webpage as a String
@@ -21,9 +24,9 @@ public static void main(String[] args) {
         System.out.println("The failure path");
     }
 }
-```
 
 The two failure cases are handled like this (the implementation of `getPage` [is defined below](#getPage)):
+
 
 ```java
 public static void main(String[] argv) {
@@ -161,7 +164,7 @@ public Success<String> getPage(String url) {
 ## Using Interfaces within the Failure Library
 
 You will note that `Success`, `Failure`, and all the failure-describing types, are Java interfaces. You use these types when _using_ the failure library, as a consumer, as in the `main` methods
-in [QuickStart](#quickStart).
+in QuickStart_.
 
 When you write your code to make use of the failure library (as a producer of success and failure) you use an implementation of these types as you can see in [getPage](#getPage) (e.g., `SuccessImpl`).
 
