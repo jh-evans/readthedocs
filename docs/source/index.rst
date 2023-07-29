@@ -3,7 +3,7 @@ The failure library
 
 The failure library makes handling Java code failure easy. It's well-known that error-handling code is buggy [1]. By making handling errors more convenient, you can focus on both code paths to build better, working code more quickly.
 
-`The failure library is available here <https://github.com/jh-evans/failure-a)`_
+`The failure library is available here <https://github.com/jh-evans/failure-a)`_ 
 
 <a name="quickStart"></a>
 ## Quickstart
