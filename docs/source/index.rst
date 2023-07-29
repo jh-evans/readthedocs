@@ -25,7 +25,7 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` `is defined below<getPage>`_:
+The two failure cases are handled like this (the implementation of ``getPage`` `is defined `below<getPage>`_:
 
 .. code-block:: java
    :linenos:
@@ -72,12 +72,10 @@ When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an ins
        }
    }
 
-All failure-describing types (``FailureValue`` and ``FailureException``) are subtypes of ``Failure`` (see `The Detail `<theDetail>`_ below), a subtype of ``Success``. ``Success`` defines ``eval`` which returns ``true``. ``eval`` on ``Failure`` and its subtypes return ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch. That is it. Easy.
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see `The Detail`<theDetail>`_ below), a subtype of ``Success``. ``Success`` defines ``eval`` which returns ``true``. ``eval`` on ``Failure`` and its subtypes return ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch. That is it. Easy.
 
 This approach focuses on the different kinds of failure, cleanly separating the various cases, without over-focusing on success and forgetting to deal with failure.
 
 .. theDetail:
 The Detail
 ----------
-
-More text
