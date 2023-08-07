@@ -133,10 +133,20 @@ is executed.
 
 ``unwrap`` returns the field that is used to check that ``false`` was correctly used twice in positions 0 and 1.
 
-If the failure path is execued, the ``switch`` on ``obj`` executes and it casts ``obj`` into one of the three failure types generated from one of the eight ways the method can fail. In each case, an assertion fails, passing a string message of where in the code the failure type was created.
+If the failure path is execued, the ``switch`` on ``obj`` executes that object is cast into one of the three failure types generated from the eight ways the method can fail. In each case, an assertion
+fails, passing a string message from ``getLocation`` of where in the code the failure type was created.
 
-As written, the default case will cannot execute as ``obj`` can only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
+As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
 case or else the default would exceute.
 
 Advantages of this Approach
 ---------------------------
+
+The advantages of this approach are:
+
+1. The failure and success paths are now explicit
+2. The different ways that ``getField`` can fail has been captured in code
+3. No ``null`` value has been returned from ``gettField``
+4. The code to handle the two path is standard and easy to follow
+
+.. Considering the failure cases helps you write better tests.
