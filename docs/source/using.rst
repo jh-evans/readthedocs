@@ -1,7 +1,8 @@
 Using
 =====
 
-It is a truth seldom acknowledged that developers mostly focus on the [Happy Path](https://en.wikipedia.org/wiki/Happy_path). Developers are busy, and they have lots to do. You need to write some code to retrieve a field back from a Java object, even when that field is marked private.
+It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy, and they have lots to do. You need to write some code
+to retrieve a field from a Java object, even when that field is marked private. You quickly whip up this code.
 
 This is the main type when using the success path in the Darien project. You use it like this:
 
