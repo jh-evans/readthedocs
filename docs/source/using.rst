@@ -14,7 +14,7 @@ This is the main type when using the success path in the Darien project. You use
        		Class<?> cls = Class.forName(cn);
        		Field fld = cls.getDeclaredField(fn);
        		fld.setAccessible(true);
-       		return new Success(fld.get(inst));
+       		return new Success(fld.get(inst)); 
        	} catch (ExceptionInInitializerError eiie) {
        		log(eiie);
        	} catch (ClassNotFoundException cnfe) {
