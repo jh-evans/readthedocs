@@ -10,6 +10,7 @@ Your tests work, and you deploy your code.
 
 .. code-block:: java
    :linenos:
+   :emphasize-lines: 4-6
 
    public static Object getField(String classname, String fieldname, Object inst) {
        	try {
@@ -34,4 +35,4 @@ Your tests work, and you deploy your code.
    		}
        	
        	return null;
-   	}
+   }
