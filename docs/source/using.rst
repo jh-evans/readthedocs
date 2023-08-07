@@ -38,8 +38,9 @@ Your tests work, and you deploy your code.
    }
 
 However, there are a number of points to note:
+
 1. What if any of the method parameters are null?
 2. The method returns null if an exception is thrown
 3. Your tests only test the happy path
 
-Considering the non happy path, help generate better tests.
+Considering the failure cases helps you write better tests.
