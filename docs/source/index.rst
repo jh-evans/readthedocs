@@ -3,7 +3,7 @@ The Darien Project
 
 The Darien Project for Java code makes handling Java code failure easy. It's well-known that error-handling code is buggy [1]. Using the library allows you to easily focus on the failure path to build better, working code more quickly.
 
-You can ask questions at info@darien-project.org.
+You can ask questions at info@darien-project.org. 
 
 .. quickStart:
 Quick Start
