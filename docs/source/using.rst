@@ -1,10 +1,10 @@
-Using
-=====
+Using the Darien Library
+========================
 
-It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy, and they have lots to do. You need to write some code
-to retrieve a field from a Java object, even when that field is marked private, so you write this to meet your requirement.
+It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. Today, you need to write some code to retrieve a field from a Java object, even when that field is marked private, so you
+type this to meet your requirement.
 
-You then write some unit tests to be sure that what you have written retrieves a private field. For each test, you pass in the required classname, fieldname, and instance the field is to be retrieved from.
+You then write some a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required classname, fieldname, and object the field is to be retrieved from.
 
 Your tests work, and you deploy your code.
 
@@ -39,8 +39,52 @@ Your tests work, and you deploy your code.
 
 However, there are a number of points to note:
 
-1. What if any of the method parameters are null?
+1. What if one of the method parameters is null?
 2. The method returns null if an exception is thrown
-3. Your tests only test the happy path
+3. Your two tests only test the happy path
 
-Considering the failure cases helps you write better tests.
+A null method parameter will result in a ClassNotFoundException, NoSuchFieldException or NullPointerException being thrown, logged and the
+method returning null. Passing back null requires the code that calls ``getField`` to distinguish these two cases or else another
+NullPointerException will be thrown, which might remain as a silent bug in the code.
+
+As each of the method parameters might be null and any of the seven ``catch`` statements could happen, there are ten different ways that this
+method might fail. The happy path represents the code block in the ``try`` statement (highlightted) running to completion.
+
+You decide to rewrite the above using the Darien Library.
+
+The Darien Library
+==================
+
+The rewrite of the above is:
+
+.. code-block:: java
+   :linenos:
+
+   public static S getField(String cn, String fn, Object inst) {
+         if(FailureUtils.oneIsNull(cn, fn, inst)) {
+           	return FailureUtils.theNull(cn, fn, inst);
+         }
+   
+       	try {
+       		Class<?> cls = Class.forName(cn);
+       		Field fld = cls.getDeclaredField(fn);
+       		fld.setAccessible(true);
+       		return new Success(fld.get(inst));
+       	} catch (ExceptionInInitializerError eiie) {
+           	return new FErr(eiie);
+       	} catch(ClassNotFoundException cnfe) {
+       		return new FExp(cnfe);
+       	} catch (NoSuchFieldException nsfe) {
+       		return new FExp(nsfe);
+   		} catch (SecurityException se) {
+       		return new FExp(se);
+   		} catch (IllegalArgumentException ile) {
+       		return new FExp(ile);
+   		} catch (NullPointerException npe) {
+       		return new FExp(npe);
+   		} catch (IllegalAccessException iae) {
+       		return new FExp(iae);
+   		}
+   }
+
+<!-- Considering the failure cases helps you write better tests. -->
