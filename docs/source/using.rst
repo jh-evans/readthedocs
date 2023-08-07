@@ -8,13 +8,14 @@ This is the main type when using the success path in the Darien project. You use
 
 .. code-block:: java
    :linenos:
+   :emphasize-lines: 4-7
 
    public static Object getField(String cn, String fn, Object inst) {
        	try {
        		Class<?> cls = Class.forName(cn);
        		Field fld = cls.getDeclaredField(fn);
        		fld.setAccessible(true);
-       		return new Success(fld.get(inst));
+       		return fld.get(inst);
        	} catch (ExceptionInInitializerError eiie) {
        		log(eiie);
        	} catch (ClassNotFoundException cnfe) {
