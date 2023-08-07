@@ -59,8 +59,9 @@ The rewrite of the above is:
 
 .. code-block:: java
    :linenos:
+   :emphasize-lines: 1, 2-4, 10
 
-   public static S getField(String cn, String fn, Object inst) {
+public static S getField(String cn, String fn, Object inst) {
          if(FailureUtils.oneIsNull(cn, fn, inst)) {
            	return FailureUtils.theNull(cn, fn, inst);
          }
@@ -87,4 +88,11 @@ The rewrite of the above is:
    		}
    }
 
-<!-- Considering the failure cases helps you write better tests. -->
+``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
+an instance of the type ``FailureArgIsNull`` that describes which of the arguments is null as a string along with the filename and line where this instance was created. This is useful when tracing issues in deployed, live systems.
+
+Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
+
+The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate failure type, ``Ferr`` or ``FExp``.
+
+.. Considering the failure cases helps you write better tests.
