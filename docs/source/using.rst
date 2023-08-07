@@ -1,11 +1,41 @@
 Using
 =====
 
+It is a truth seldom acknowledged that developers mostly focus on the [Happy Path](https://en.wikipedia.org/wiki/Happy_path). Developers are busy, and they have lots to do. You need to write some code to retrieve a field back from a Java object, even when that field is marked private.
+
 This is the main type when using the success path in the Darien project. You use it like this:
 
 .. code-block:: java
    :linenos:
 
+   public static Object getField(String cn, String fn, Object inst) {
+       	try {
+       		Class<?> cls = Class.forName(cn);
+       		Field fld = cls.getDeclaredField(fn);
+       		fld.setAccessible(true);
+       		return new Success(fld.get(inst));
+       	} catch (ExceptionInInitializerError eiie) {
+       		log(eiie);
+       	} catch (ClassNotFoundException cnfe) {
+       		log(cnfe);
+       	} catch (NoSuchFieldException nsfe) {
+       		log(nsfe);
+   		} catch (SecurityException se) {
+       		log(se);
+   		} catch (IllegalArgumentException ile) {
+       		log(ile);
+   		} catch (NullPointerException npe) {
+       		log(npe);
+   		} catch (IllegalAccessException iae) {
+       		log(iae);
+   		}
+       	
+       	return null;
+   	}
+
+
+.. code-block:: java
+   :linenos:
    // This code is taken from the Darien Project Unit Tests
    //
    // getField is the code that you are calling that may fail
