@@ -86,13 +86,57 @@ The rewrite of the above is:
       		} catch (IllegalAccessException iae) {
           		return new FExp(iae);
       		}
-      }
+   }
 
 ``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
-an instance of the type ``FailureArgIsNull`` that describes which of the arguments is null as a string along with the filename and line where this instance was created. This is useful when tracing issues in deployed, live systems.
+an instance of the type ``FailureArgIsNull`` that lists which of the arguments is null as a string along with the filename and line where this instance was created. This is useful when tracing issues in
+deployed, live systems.
 
 Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
 
-The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate failure type, ``Ferr`` or ``FExp``.
+The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate ``Failure`` type, ``Ferr`` or ``FExp``.
 
 .. Considering the failure cases helps you write better tests.
+
+Calling ``getField``
+--------------------
+
+The invocation of the rewritten ``getField`` is:
+
+.. code-block:: java
+   :linenos:
+
+   FailureArgIsFalse faif = FailureUtils.theFalse(new Boolean[] {false, false});    	
+   S obj = TestUtils.getField("org.darien.types.impl.ArgsList", "idxs", faif);
+    	
+   if(obj.eval()) {
+     List<Number> idxs = (List<Number>) obj.unwrap();
+
+     assertTrue(idxs.size() == 2);
+     assertTrue((int)idxs.get(0) == 0);
+     assertTrue((int)idxs.get(1) == 1);
+    } else {
+      switch (obj) {
+        case FailureError err -> assertTrue(err.getLocation(), false);
+        case FailureException exp -> assertTrue(exp.getLocation(), false);
+        case FailureArgIsNull fain -> assertTrue(fain.getLocation(), false);
+        default -> System.out.println("As currently written, not possible.");
+      }
+    }
+
+The above code is taken from a unit test.
+
+``getField`` (line 2) is called with a classname, fieldname and instance.
+
+A type of ``S`` is returned that is evaluated. If ``eval`` returns true, ``obj`` represents the success case and ``unwrap`` is called. Otherwise, the call has failed and the ``switch`` on  line 11
+is executed.
+
+``unwrap`` returns the field that is used to check that ``false`` was correctly used twice in positions 0 and 1.
+
+If the failure path is execued, the ``switch`` on ``obj`` executes and it casts ``obj`` into one of the three failure types generated from one of the eight ways the method can fail. In each case, an assertion fails, passing a string message of where in the code the failure type was created.
+
+As written, the default case will cannot execute as ``obj`` can only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
+case or else the default would exceute.
+
+Advantages of this Approach
+---------------------------
