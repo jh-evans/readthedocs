@@ -26,15 +26,15 @@ Your tests work, and you deploy your code.
        		log(cnfe);
        	} catch (NoSuchFieldException nsfe) {
        		log(nsfe);
-   		} catch (SecurityException se) {
-       		log(se);
-   		} catch (IllegalArgumentException ile) {
-       		log(ile);
-   		} catch (NullPointerException npe) {
-       		log(npe);
-   		} catch (IllegalAccessException iae) {
-       		log(iae);
-   		}
+         } catch (SecurityException se) {
+            log(se);
+         } catch (IllegalArgumentException ile) {
+            log(ile);
+         } catch (NullPointerException npe) {
+            log(npe);
+         } catch (IllegalAccessException iae) {
+            log(iae);
+         }
        	
        	return null;
    }
@@ -42,27 +42,28 @@ Your tests work, and you deploy your code.
 However, there are a number of points to note:
 
 1. What if one of the method parameters is null?
-2. The method returns null if an exception is thrown, potentially propagating null around the codebase
+2. ``getField`` returns null if an exception is thrown, which could propagate around your code
 3. Your two unit tests only test the happy path
 
-A null method parameter will result in a ClassNotFoundException, NoSuchFieldException or NullPointerException being thrown, logged and the
-method returning null. Passing back null requires the code that calls ``getField`` to distinguish these two cases or else another
-NullPointerException will be thrown, which might remain a silent bug in the code.
+A null method parameter will result in a ClassNotFoundException, NoSuchFieldException or NullPointerException being thrown, logged and ``getField``
+returning null. Passing back null burdens the code that calls ``getField`` to distinguish between the null and non-null cases or else another
+NullPointerException might be thrown, which could remain a silent bug in the code.
 
-As each of the three method parameters could be null and any of the seven ``catch`` statements might occur, there are ten different ways that this
-method might fail. The happy path represents the code block in the ``try`` statement (highlighted) running to completion with no issues.
+As each of the three method parameters might be null and any of the seven ``catch`` statements could be triggered, there are ten different ways that this
+method might fail. The four lines of the happy path represents the code block in the ``try`` statement running to completion with no issues (highlighted).
 
 You decide to rewrite the above using the Darien Library.
 
 The Darien Library
 ==================
 
-The rewrite wraps your results in Darian Libray objects and tool support generates the code to unwrap them.
+The Darien Library wraps objects that represent failure cases and tool support automates code to unwrap them.
 
 The code above becomes:
 
 .. code-block:: java
    :linenos:
+   :caption: The rewritten ``getField``
    :emphasize-lines: 1, 2-4, 10
 
    public static S getField(String cn, String fn, Object inst) {
@@ -93,22 +94,21 @@ The code above becomes:
    }
 
 ``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
-an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where this instance was created. This is useful when tracing issues in
-deployed, live systems.
+an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where the null instance was created. This is useful when tracing issues in deployed,
+live systems.
 
 Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
 
-The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate ``Failure`` type, ``Ferr`` or ``FExp``.
-
-.. Considering the failure cases helps you write better tests.
+The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate ``Failure`` subclass, ``FErr`` or ``FExp``.
 
 Calling ``getField``
 --------------------
 
-The invocation of the rewritten ``getField`` is:
+The call to the rewritten ``getField`` is:
 
 .. code-block:: java
    :linenos:
+   :caption: Calling the rewritten ``getField``
 
    FailureArgIsFalse faif = FailureUtils.theFalse(new Boolean[] {false, false});    	
    S obj = TestUtils.getField("org.darien.types.impl.ArgsList", "idxs", faif);
@@ -128,18 +128,18 @@ The invocation of the rewritten ``getField`` is:
       }
     }
 
-The above code is taken from a unit test and you do not need to write it, Darien tool support writes it for you.
+The above code example is taken from a unit test. The assignment to ``obj``, the ``if``, ``else`` and their use of ``obj`` you do not need to write, Darien tool support will generate for you.
 
 ``getField`` (line 2) is called with a classname, fieldname and instance.
 
 An object (``obj``) of type ``S`` is returned. If ``eval`` returns true, ``obj`` represents the success case and ``unwrap`` is called. Otherwise, the call has failed and the ``switch`` on  line 11
 is executed.
 
-In the success case, ``unwrap`` returns the result from line 10 of the implementation of ``getField`` above (``fld.get(inst)``).
+In the success case, ``unwrap`` returns the result from line 10 of the implementation of the rewitten ``getField`` above (``fld.get(inst)``).
 
-If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail (``FailureError``,
-``FailureException```, and ``FailureArgIsNull``). In each case, an assertion fails (on the righthand side of the ->), passing in a string message from ``getLocation`` that describes where in the
-code the failure type was created.
+If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight failure cases (``FailureError``, ``FailureException```,
+and ``FailureArgIsNull``). In each case, in the ``switch`` an assertion fails (on the righthand side of the ->), passing in a string message from ``getLocation`` that describes where in the
+code the failure instance was created.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
 case or else the default would exceute. This is the reason for the assertion failure on the default line.
