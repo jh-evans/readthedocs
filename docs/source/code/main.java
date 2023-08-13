@@ -2,7 +2,7 @@ public static void main(String[] args) {
     Main m = new Main();
 
     // When called like this, GETs a webpage as a String
-    Object obj = m.getPage("https://www.example.com");
+    S obj = m.getPage("https://www.example.com");
 
     if(obj.eval()) {
         String page = (String) obj.unwrap();
