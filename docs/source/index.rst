@@ -16,7 +16,7 @@ way, the failure path will be executed.
    :language: java
    :linenos:
 
-Darien Library tool support will write the code invocation for you, the ``if``, ``else``, and ``switch`` you see below so that you can focus on what you need to.
+Darien Library tool support will write the code invocation for you, the ``if``, ``else``, and ``switch``, you see below so that you can focus on what you need to.
 
 We handle the two failure cases like this (the implementation of ``getPage`` is defined in getPage_):
 
@@ -26,16 +26,16 @@ We handle the two failure cases like this (the implementation of ``getPage`` is 
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
-Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 being returned, wrapped in a ``FailureValue``.
+Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage``, results in a 404 being returned, wrapped in a ``FailureValue``.
 
-When ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, an instance of ``FailureException`` is returned.
+As below, when ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, an instance of ``FailureException`` is returned.
 
 .. literalinclude:: /code/main_failureexception.java
    :language: java
    :linenos:
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see theDetail_ below), whicch in turn is a subtype of ``Success``. ``Success`` defines
-``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see theDetail_), which in turn is a subtype of ``S``. ``S`` defines
+``eval`` to return ``true``. ``eval`` on ``F`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
 That is it.
 
 This approach focuses on the different kinds of failure, cleanly separating all cases, and tool supports write the handling code.
@@ -44,7 +44,7 @@ This approach focuses on the different kinds of failure, cleanly separating all 
 The Detail
 ----------
 
-``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``. Generics are not used. This is explained below in generics_.
+``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``. Generics are not used. This is explained in generics_.
 
 .. literalinclude:: /code/S.java
    :language: java
