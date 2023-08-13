@@ -9,9 +9,9 @@
            System.out.println("Success");
        } else {
            switch (obj) {
-               case FailureValue<String> fv -> System.out.println(fv.getValue());
-               case FailureException<String> fe -> System.out.println(fe.getException());
-               default  -> System.out.println("As currently written, not possible.");
+               case FailureValue fv -> System.out.println(fv.getValue());
+               case FailureException fe -> System.out.println(fe.getException());
+               default -> System.out.println("As currently written, not possible.");
            }
        }
    }
