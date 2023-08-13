@@ -26,7 +26,7 @@ We handle the two failure cases like this (the implementation of ``getPage`` is 
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
-Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage``, results in a 404 being returned, wrapped in a ``FailureValue``.
+Running the above, attempting to retrieve ``https://www.example.com/nosuchpage``, results in a 404 being returned, wrapped in a ``FailureValue``.
 
 As below, when ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, an instance of ``FailureException`` is returned.
 
@@ -34,9 +34,9 @@ As below, when ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, a
    :language: java
    :linenos:
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see the detail_), which in turn is a subtype of ``S``. ``S`` defines
-``eval`` to return ``true``. ``eval`` on ``F`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
-That is it.
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see the detail_), which in turn is a subtype of ``S``. ``S``'s ``eval`` returns ``true``, whereas
+``eval`` on ``F`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
+That is it. You are done.
 
 This approach focuses on the different kinds of failure, cleanly separating all cases, and tool supports write the handling code.
 
