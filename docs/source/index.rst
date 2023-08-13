@@ -12,21 +12,9 @@ Quick Start
 The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET might return a status value outside the 200 to 299 success range, or ``getPage`` might have encountered an exception. Either
 way, the failure path will be executed.
 
-.. code-block:: java
+.. literalinclude:: /code/main.java
+   :language: java
    :linenos:
-
-   public static void main(String[] args) {
-       Main m = new Main();
-
-       // When called like this, GETs a webpage as a String
-       Success<String> page = m.getPage("https://www.example.com");
-
-       if(page.eval()) {
-           System.out.println("The success path");
-       } else {
-           System.out.println("The failure path");
-       }
-   }
 
 Darien Library tool support will write the code invocation for you, the ``if``, ``else``, and ``switch`` you see below so that you can focus on what you need to.
 
