@@ -120,7 +120,7 @@ By focusing on failure, we see that:
 2. All code paths are terminated at a ``return``
 3. Any code that searches for something can fail
 
-One way to address the first point is to use pre-conditions and return an appropriate failure instance. The Darien Library supports you here with its calls to ``FailureUtils.oneINull`` and
+One way to address the first point is to use pre-conditions, returning an appropriate failure instance on pre-condition failure. The Darien Library supports you here with its calls to ``FailureUtils.oneIsNull`` and
 ``FailureUtils.theNull``.
 
 For point 2., the Darien approach is to return those exceptions you can wrapped in a ``FailureException``. This style is preferred over throwing an exception as where it is caught might be a long way from the point of generation, reducing options for addressing the issue. However, doing this is a matter of style and preference.
