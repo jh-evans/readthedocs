@@ -20,25 +20,9 @@ Darien Library tool support will write the code invocation for you, the ``if``, 
 
 We handle the two failure cases like this (the implementation of ``getPage`` is defined in getPage_):
 
-.. code-block:: java
+.. literalinclude:: /code/main_failurevalue.java
+   :language: java
    :linenos:
-
-   public static void main(String[] argv) {
-       Main m = new Main();
-
-       // When called like this,  returns a FailureValue, wrapping 404
-       Success<String> page = m.getPage("https://www.example.com/nosuchpage");
-   
-       if(page.eval()) {
-           System.out.println("Success");
-       } else {
-           switch (page) {
-               case FailureValue<String> fv -> System.out.println(fv.getValue());
-               case FailureException<String> fe -> System.out.println(fe.getException());
-               default  -> System.out.println("As currently written, not possible.");
-           }
-       }
-   }
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
@@ -46,24 +30,9 @@ Running the above code, attempting to retrieve ``https://www.example.com/nosuchp
 
 When the code is passed ``https://www.cannotfindthisdomain.com``, ``getPage`` below returns an instance of ``FailureException``.
 
-.. code-block:: java
+.. literalinclude:: /code/main_failurexception.java
+   :language: java
    :linenos:
-   public static void main(String[] argv) {
-       Main m = new Main();
-
-      // When called like this,  returns an instance of FailureException
-       Success<String> page = m.getPage("https://www.cannotfindthisdomain.com");
-   
-       if(page.eval()) {
-           System.out.println("Success");
-       } else {
-           switch (page) {
-               case FailureValue<String> fv -> System.out.println(fv.getValue());
-               case FailureException<String> fe -> System.out.println(fe.getException());
-               default  -> System.out.println("As currently written, not possible.");
-           }
-       }
-   }
 
 All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see theDetail_ below), whicch in turn is a subtype of ``Success``. ``Success`` defines
 ``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
