@@ -10,7 +10,7 @@ public static void main(String[] argv) {
         switch (obj) {
             case FailureValue fv -> System.out.println(fv.getValue());
             case FailureException fe -> System.out.println(fe.getException());
-            default  -> System.out.println("As currently written, not possible.");
+            default -> System.out.println("As currently written, not possible.");
         }
     }
 }
