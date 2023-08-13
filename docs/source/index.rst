@@ -26,11 +26,11 @@ We handle the two failure cases like this (the implementation of ``getPage`` is 
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
-Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 value being returned, wrapped in a ``FailureValue``.
+Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 being returned, wrapped in a ``FailureValue``.
 
 When ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, an instance of ``FailureException`` is returned.
 
-.. literalinclude:: /code/main_failurexception.java
+.. literalinclude:: /code/main_failureexception.java
    :language: java
    :linenos:
 
@@ -44,7 +44,7 @@ This approach focuses on the different kinds of failure, cleanly separating all 
 The Detail
 ----------
 
-``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``.
+``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``. Generics are not used. This is explained below in generics_.
 
 .. literalinclude:: /code/S.java
    :language: java
@@ -52,11 +52,9 @@ The Detail
 
 ``Failure`` is the root of all failure-describing classes:
 
-.. code-block:: java
-  :linenos:
-
-   public interface Failure<T> extends Success<T> {
-   }
+.. literalinclude:: /code/F.java
+   :language: java
+   :linenos:
 
 All subtypes of ``Failure`` override ``eval`` to return ``false``.
 
@@ -128,7 +126,15 @@ When ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return 
        }
    }
 
-In fact, ``getPage`` looks perfectly reasonable, but the ``url`` passed in may be null or it may contain a malformed URL. In addition, the author of ``getPage`` may decide that any use of ``http`` should be rejected as only ``https`` is to be supported for security reasons.
+In fact, ``getPage`` looks perfectly reasonable, but the ``url`` passed in may be null or it may contain a malformed URL. In addition, the author of ``getPage`` may decide that any use of
+``http`` should be rejected as only ``https`` is to be supported for security reasons.
+
+.. generics:
+Generics
+----------
+Types ``S`` and ``F`` do not use generics. This means that the ``unwrap`` call on ``obj`` must be cast to the type you are interested in. A generic ``S<T>`` would remove the need for you to type the cast. 
+However, in the failure case (which has more types), you would be required to enter the type for the success case, e.g., ``FailureValue<String>``, which is redundant as the failure types are containers
+for objects that represent the failure case, not the success case. Generics have not been used to ensure code brevity.
 
 Using Interfaces
 ----------------
