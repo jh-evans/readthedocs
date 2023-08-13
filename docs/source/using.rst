@@ -1,10 +1,10 @@
 Using the Darien Library
 ========================
 
-It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. Today, you need to write some code to retrieve a field from a Java object, even when that field is marked private, so you
-type this to meet your requirement.
+It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. And today your challenge is to 
+retrieve a field from a Java object, even when that field is marked private, so you develop this.
 
-You then write some a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required classname, fieldname, and object the field is to be retrieved from.
+You then write a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required classname, fieldname, and object the field is to be retrieved from.
 
 Your tests work, and you deploy your code.
 
@@ -40,15 +40,15 @@ Your tests work, and you deploy your code.
 However, there are a number of points to note:
 
 1. What if one of the method parameters is null?
-2. The method returns null if an exception is thrown
-3. Your two tests only test the happy path
+2. The method returns null if an exception is thrown, potentially propagating null around the codebase
+3. Your two unit tests only test the happy path
 
 A null method parameter will result in a ClassNotFoundException, NoSuchFieldException or NullPointerException being thrown, logged and the
 method returning null. Passing back null requires the code that calls ``getField`` to distinguish these two cases or else another
-NullPointerException will be thrown, which might remain as a silent bug in the code.
+NullPointerException will be thrown, which might remain a silent bug in the code.
 
-As each of the method parameters might be null and any of the seven ``catch`` statements could happen, there are ten different ways that this
-method might fail. The happy path represents the code block in the ``try`` statement (highlightted) running to completion.
+As each of the three method parameters could be null and any of the seven ``catch`` statements might occur, there are ten different ways that this
+method might fail. The happy path represents the code block in the ``try`` statement (highlighted) running to completion with no issues.
 
 You decide to rewrite the above using the Darien Library.
 
@@ -124,17 +124,17 @@ The invocation of the rewritten ``getField`` is:
       }
     }
 
-The above code is taken from a unit test.
+The above code is taken from a unit test and you do not need to write it, Darien tool support writes it for you.
 
 ``getField`` (line 2) is called with a classname, fieldname and instance.
 
-A type of ``S`` is returned that is evaluated. If ``eval`` returns true, ``obj`` represents the success case and ``unwrap`` is called. Otherwise, the call has failed and the ``switch`` on  line 11
+An object (``obj``) of type ``S`` is returned. If ``eval`` returns true, ``obj`` represents the success case and ``unwrap`` is called. Otherwise, the call has failed and the ``switch`` on  line 11
 is executed.
 
-``unwrap`` returns the field that is used to check that ``false`` was correctly used twice in positions 0 and 1.
+In the success case, ``unwrap`` returns the result from line 10 of the implementation of ``getField`` above (``fld.get(inst)``).
 
-If the failure path is execued, the ``switch`` on ``obj`` executes that object is cast into one of the three failure types generated from the eight ways the method can fail. In each case, an assertion
-fails, passing a string message from ``getLocation`` of where in the code the failure type was created.
+If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail. In each case, an assertion
+fails, passing a string message from ``getLocation`` that describes where in the code the failure type was created.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
 case or else the default would exceute.
@@ -148,5 +148,6 @@ The advantages of this approach are:
 2. The different ways that ``getField`` can fail has been captured in code
 3. No ``null`` value has been returned from ``gettField``
 4. The code to handle the two path is standard and easy to follow
+5. Darien tool supports will write all of the code above so that you can focus on what you need to do
 
 .. Considering the failure cases helps you write better tests.
