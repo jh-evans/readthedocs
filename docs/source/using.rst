@@ -153,5 +153,5 @@ The advantages of this approach are:
 2. The different ways that ``getField`` can fail has been captured in code
 3. No ``null`` value has been returned from ``gettField``
 4. The code to handle the two path is standard and easy to follow
-5. Darien tool supports will write all of the code above so that you can focus on what you need to do
-6. Considering the failure cases helps you write better tests.
+5. Darien tool supports writes the path handling code so that you can focus on what you need to do
+6. Considering the failure cases helps you write better tests
