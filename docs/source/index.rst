@@ -34,13 +34,13 @@ As below, when ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, a
    :language: java
    :linenos:
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see theDetail_), which in turn is a subtype of ``S``. ``S`` defines
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see the detail_), which in turn is a subtype of ``S``. ``S`` defines
 ``eval`` to return ``true``. ``eval`` on ``F`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
 That is it.
 
 This approach focuses on the different kinds of failure, cleanly separating all cases, and tool supports write the handling code.
 
-.. theDetail:
+.. detail:
 The Detail
 ----------
 
