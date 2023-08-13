@@ -126,7 +126,7 @@ When ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return 
        }
    }
 
-In fact, ``getPage`` looks perfectly reasonable, but the ``url`` passed in may be null or it may contain a malformed URL. In addition, the author of ``getPage`` may decide that any use of
+In fact, ``getPage`` looks perfectly reasonable, ``url`` may be null or malformed. In addition, the author of ``getPage`` may decide that any use of
 ``http`` should be rejected as only ``https`` is to be supported for security reasons.
 
 .. Generics:
