@@ -18,7 +18,7 @@ way, the failure path will be executed.
 
 Darien Library tool support will write the code invocation for you, the ``if``, ``else``, and ``switch`` you see below so that you can focus on what you need to.
 
-We handl the two failure cases like this (the implementation of ``getPage`` is defined in getPage_):
+We handle the two failure cases like this (the implementation of ``getPage`` is defined in getPage_):
 
 .. code-block:: java
    :linenos:
