@@ -1,0 +1,11 @@
+   private Success<String> rhs(String input) {
+       if(FailureUtils.oneIsNull(input)) {
+        	return FailureUtils.theNull(input);
+        }
+
+       if(input.indexOf("-") == -1) {
+         return new FailureValueImpl(-1);
+       } else {
+         return new SuccessImpl<String>(input.split("-")[1]);
+       }
+   }
