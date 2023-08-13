@@ -50,43 +50,36 @@ The Detail
    :language: java
    :linenos:
 
-``Failure`` is the root of all failure-describing classes:
+``F`` is the root of all failure-describing types:
 
 .. literalinclude:: /code/F.java
    :language: java
    :linenos:
 
-All subtypes of ``Failure`` override ``eval`` to return ``false``.
+All subtypes of ``F`` override ``eval`` to return ``false``.
 
-The failure-describing types below (such as ``FailureValue``) are wrappers around an instance associated with the failure, such as a value or exception. This is because, in the failure case, the instance
-of type T is not used; T is associated with a successful operation. However, for Java type correctness, ``Failure<T>`` must be written. 
+The failure-describing types below (such as ``FailureValue``) are wrappers around an instance associated with the failure, such as a value or exception.
 
 ``FailureValue`` is defined as:
 
-.. code-block:: java
+.. literalinclude:: /code/failurevalue.java
+   :language: java
    :linenos:
 
-   public interface FailureValue<T> extends Failure<T> {
-       public Number getValue();
-   }
-
-``FailureValue`` wraps a ``Number``. This type is useful when an operation has failed and a code value is to be associated with that failure, as in the HTTP GET 404 above.
+``FailureValue`` wraps a ``Number``. This type is useful when an operation has failed and a code value associated with the failure is to be returned, as in the HTTP GET 404 above.
 
 ``FailureException`` wraps an exception in the same way:
 
-.. code-block:: java
+.. literalinclude:: /code/failureexception.java
+   :language: java
    :linenos:
-
-   public interface FailureException<T> extends Failure<T> {
-       public Exception getException();
-   }
 
 .. getPage:
 `getPage`
 --------
 
-When ``url`` is ``https://www.cannotfindthisdomain.com``, ``getPage`` will return a ``FailureException`` that will wrap the thrown ``java.net.UnknownHostException``.
-When ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a ``FailureValue`` that will wrap the number 404.
+When ``url`` is ``https://www.cannotfindthisdomain.com``, ``getPage`` returns a ``FailureException`` that wraps the thrown ``java.net.UnknownHostException``.
+If ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a ``FailureValue`` that wraps the number 404.
 
 .. code-block:: java
    :linenos:
@@ -132,9 +125,9 @@ In fact, ``getPage`` looks perfectly reasonable, ``url`` may be null or malforme
 .. Generics:
 Generics
 ----------
-Types ``S`` and ``F`` do not use generics. This means that the ``unwrap`` call on ``obj`` must be cast to the type you are interested in. A generic ``S<T>`` would remove the need for you to type the cast. 
-However, in the failure case (which has more types), you would be required to enter the type for the success case, e.g., ``FailureValue<String>``, which is redundant as the failure types are containers
-for objects that represent the failure case, not the success case. Generics have not been used to ensure code brevity.
+Types ``S`` and ``F`` do not use generics. This means that the ``unwrap`` call on ``obj`` must be cast to the type you are interested in. A generic ``S<T>`` would remove the need for the cast. 
+However, in the failure case (which has more types), you would be required to enter the generic type for the success case, e.g., ``FailureValue<String>``, which is redundant as the failure types are
+containers for failure objects. Generics have not been used to ensure code brevity.
 
 Using Interfaces
 ----------------
