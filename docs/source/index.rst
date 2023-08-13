@@ -34,17 +34,17 @@ As below, when ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, a
    :language: java
    :linenos:
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see the detail_), which in turn is a subtype of ``S``. ``S``'s ``eval`` returns ``true``, whereas
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``F`` (see The Detail_), which in turn is a subtype of ``S``. ``S``'s ``eval`` returns ``true``, whereas
 ``eval`` on ``F`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
 That is it. You are done.
 
 This approach focuses on the different kinds of failure, cleanly separating all cases, and tool supports write the handling code.
 
-.. detail:
+.. Detail:
 The Detail
 ----------
 
-``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``. Generics are not used. This is explained in generics_.
+``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``. Generics are not used. This is explained in Generics_.
 
 .. literalinclude:: /code/S.java
    :language: java
@@ -129,7 +129,7 @@ When ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return 
 In fact, ``getPage`` looks perfectly reasonable, but the ``url`` passed in may be null or it may contain a malformed URL. In addition, the author of ``getPage`` may decide that any use of
 ``http`` should be rejected as only ``https`` is to be supported for security reasons.
 
-.. generics:
+.. Generics:
 Generics
 ----------
 Types ``S`` and ``F`` do not use generics. This means that the ``unwrap`` call on ``obj`` must be cast to the type you are interested in. A generic ``S<T>`` would remove the need for you to type the cast. 
