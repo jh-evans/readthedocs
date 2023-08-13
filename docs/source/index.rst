@@ -9,7 +9,8 @@ You can ask questions at info@darien-project.org.
 Quick Start
 -----------
 
-The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET might return a status value outside the 200 to 299 success range, or ``getPage`` might encounter an exception. Either way, the failure path will be executed.
+The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET might return a status value outside the 200 to 299 success range, or ``getPage`` might have encountered an exception. Either
+way, the failure path will be executed.
 
 .. code-block:: java
    :linenos:
@@ -27,7 +28,9 @@ The call to ``m.getPage`` below may fail in two ways: its internal HTTP GET migh
        }
    }
 
-The two failure cases are handled like this (the implementation of ``getPage`` is defined below in getPage_):
+Darien Library tool support will write the code invocation for you, the ``if``, ``else``, and ``switch`` you see below so that you can focus on what you need to.
+
+We handl the two failure cases like this (the implementation of ``getPage`` is defined in getPage_):
 
 .. code-block:: java
    :linenos:
@@ -36,7 +39,7 @@ The two failure cases are handled like this (the implementation of ``getPage`` i
        Main m = new Main();
 
        // When called like this,  returns a FailureValue, wrapping 404
-       Success<String> page = m.("https://www.example.com/nosuchpage");
+       Success<String> page = m.getPage("https://www.example.com/nosuchpage");
    
        if(page.eval()) {
            System.out.println("Success");
@@ -51,9 +54,9 @@ The two failure cases are handled like this (the implementation of ``getPage`` i
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
-Attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 being returned, passed back wrapped in a ``FailureValue``.
+Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 failure being returned, passed back wrapped in a ``FailureValue``.
 
-When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an instance of ``FailureException``.
+When the code is passed ``https://www.cannotfindthisdomain.com``, ``getPage`` below returns an instance of ``FailureException``.
 
 .. code-block:: java
    :linenos:
@@ -61,7 +64,7 @@ When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an ins
        Main m = new Main();
 
       // When called like this,  returns an instance of FailureException
-       Success<String> page = m.("https://www.cannotfindthisdomain.com");
+       Success<String> page = m.getPage("https://www.cannotfindthisdomain.com");
    
        if(page.eval()) {
            System.out.println("Success");
@@ -74,9 +77,11 @@ When passed ``https://www.cannotfindthisdomain.com``, ``getPage`` returns an ins
        }
    }
 
-All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see theDetail_ below), whicch in turn is a subtype of ``Success``. ``Success`` defines ``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch. That is it. Easy.
+All failure-describing types (``FailureValue``, ``FailureException`` and others) are subtypes of ``Failure`` (see theDetail_ below), whicch in turn is a subtype of ``Success``. ``Success`` defines
+``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
+That is it.
 
-This approach focuses on the different kinds of failure, cleanly separating the various cases.
+This approach focuses on the different kinds of failure, cleanly separating the various cases, and tool supports write the handling code.
 
 .. theDetail:
 The Detail
