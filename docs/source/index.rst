@@ -81,43 +81,15 @@ The failure-describing types below (such as ``FailureValue``) are wrappers aroun
 When ``url`` is ``https://www.cannotfindthisdomain.com``, ``getPage`` returns a ``FailureException`` that wraps the thrown ``java.net.UnknownHostException``.
 If ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a ``FailureValue`` that wraps the number 404.
 
-.. code-block:: java
+.. literalinclude:: /code/getpage.java
+   :language: java
    :linenos:
-
-   public Success<String> getPage(String url) {
-       try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-           final HttpGet httpget = new HttpGet(url);
-   
-           Result result = httpclient.execute(httpget, response -> {
-               return new Result(response.getCode(), EntityUtils.toString(response.getEntity()));
-           });
-   
-           if(result.status_code >= 200 && result.status_code <= 299) {
-                   return new SuccessImpl<String>(result.page);
-           } else {
-                   return new FailureValueImpl<String>(result.status_code);
-           }
-       } catch(java.io.IOException ioe) {
-               return new FailureExceptionImpl<String>(ioe);
-       } catch(Exception e) {
-               return new FailureExceptionImpl<String>(e);
-       }
-   }
 
 ``Result`` is a ``static class`` defined in the same class as ``getPaage`` used to pass the response code and the retrieved webpage from ``execute`` so it can be assigned to ``result``.
 
-.. code-block:: java
+.. literalinclude:: /code/result.java
+   :language: java
    :linenos:
-
-   private static class Result {
-       public final int status_code;
-       public final String page;
-
-       public Result(int i, String str) {
-           this.status_code = i;
-           this.page = str;
-       }
-   }
 
 In fact, ``getPage`` looks perfectly reasonable, ``url`` may be null or malformed. In addition, the author of ``getPage`` may decide that any use of
 ``http`` should be rejected as only ``https`` is to be supported for security reasons.
@@ -142,7 +114,7 @@ As an engineer, you reason about success and failure and how to handle these cas
 Focusing on Failure Leads to More Robust Code
 ---------------------------------------------
 
-By focusing on failure, we can see that:
+By focusing on failure, we see that:
 
 1. Any method parameter can cause your code to fail
 2. All code paths are terminated at a ``return``
@@ -155,29 +127,15 @@ For point 2., the Darien approach is to return those exceptions you can wrapped 
 
 Code that searches for an item is common. A search will fail when the item cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
-.. code-block:: java
-  :linenos:
-
-   private String rhs(String input) {
-       return input.split("-")[1];
-   }
+.. literalinclude:: /code/rhs.java
+   :language: java
+   :linenos:
 
 If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` is ``hyphenated``, an ``ArrayIndexOutOfBoundsException`` will be raised. This code addresses the problem:
 
-.. code-block:: java
+.. literalinclude:: /code/rhs_darien_version.java
+   :language: java
    :linenos:
-
-   private Success<String> rhs(String input) {
-       if(FailureUtils.oneIsNull(input)) {
-        	return FailureUtils.theNull(input);
-        }
-
-       if(input.indexOf("-") == -1) {
-         return new FailureValueImpl(-1);
-       } else {
-         return new SuccessImpl<String>(input.split("-")[1]);
-       }
-   }
 
 If ``input`` is null or input does not contain a hyphen, these cases are explicitly handled.
 
