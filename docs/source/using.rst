@@ -2,14 +2,16 @@ Using the Darien Library
 ========================
 
 It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. And today your challenge is to 
-retrieve a field from a Java object, even when that field is marked private, so you develop this.
+retrieve a field from a Java object, even when that field is marked private, so you develop ``getField`` below.
 
-You then write a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required classname, fieldname, and object the field is to be retrieved from.
+You then write a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required name of the field, its classname, and the object the 
+field is to be retrieved from.
 
 Your tests work, and you deploy your code.
 
 .. code-block:: java
    :linenos:
+   :caption: Your initial implementation of ``getField``
    :emphasize-lines: 3-6
 
    public static Object getField(String classname, String fieldname, Object inst) {
