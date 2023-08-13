@@ -122,7 +122,7 @@ The invocation of the rewritten ``getField`` is:
         case FailureError err -> assertTrue(err.getLocation(), false);
         case FailureException exp -> assertTrue(exp.getLocation(), false);
         case FailureArgIsNull fain -> assertTrue(fain.getLocation(), false);
-        default -> System.out.println("As currently written, not possible.");
+        default -> assertTrue(false);
       }
     }
 
@@ -139,7 +139,7 @@ If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` i
 fails, passing a string message from ``getLocation`` that describes where in the code the failure type was created.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
-case or else the default would exceute.
+case or else the default would exceute. This is the reason for the assertion failure on the default line.
 
 Advantages of this Approach
 ---------------------------
@@ -151,5 +151,4 @@ The advantages of this approach are:
 3. No ``null`` value has been returned from ``gettField``
 4. The code to handle the two path is standard and easy to follow
 5. Darien tool supports will write all of the code above so that you can focus on what you need to do
-
-.. Considering the failure cases helps you write better tests.
+6. Considering the failure cases helps you write better tests.
