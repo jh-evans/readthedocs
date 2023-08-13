@@ -1,7 +1,7 @@
 public static void main(String[] args) {
     Main m = new Main();
 
-    // When called like this, GETs a webpage as a String and returns it wrapped inside an ``S`` type
+    // GETs a webpage as a String and returns it wrapped inside an ``S`` type
     S obj = m.getPage("https://www.example.com");
 
     if(obj.eval()) {
