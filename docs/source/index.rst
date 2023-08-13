@@ -44,15 +44,11 @@ This approach focuses on the different kinds of failure, cleanly separating the 
 The Detail
 ----------
 
-``Success`` is a generic type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``.
+``S`` is a type that wraps an instance and defines two methods. ``unwrap`` returns the instance and ``eval`` returns ``true``.
 
-.. code-block:: java
+.. literalinclude:: /code/S.java
+   :language: java
    :linenos:
-
-   public interface Success<T> {	
-       public boolean eval();
-       public T unwrap();
-   }
 
 ``Failure`` is the root of all failure-describing classes:
 
