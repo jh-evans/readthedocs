@@ -137,8 +137,9 @@ is executed.
 
 In the success case, ``unwrap`` returns the result from line 10 of the implementation of ``getField`` above (``fld.get(inst)``).
 
-If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail. In each case, an assertion
-fails, passing a string message from ``getLocation`` that describes where in the code the failure type was created.
+If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail (``FailureError``,
+``FailureException```, and ``FailureArgIsNull``). In each case, an assertion fails (on the righthand side of the ->), passing in a string message from ``getLocation`` that describes where in the
+code the failure type was created.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
 case or else the default would exceute. This is the reason for the assertion failure on the default line.
