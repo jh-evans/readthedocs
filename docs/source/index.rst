@@ -196,11 +196,12 @@ By focusing on failure, we can see that:
 2. All code paths are terminated at a ``return``
 3. Any code that searches for something can fail
 
-One way to address the first point is to use pre-conditions and return an appropriate failure instance.
+One way to address the first point is to use pre-conditions and return an appropriate failure instance. The Darien Library supports you here with its calls to ``FailureUtils.oneINull`` and
+``FailureUtils.theNull``.
 
-For point 2., this approach catches exceptions and returns them as a ``FailureException``. This style is preferred over throwing an exception out of the current method as this might be a long way from the point of generation, reducing mediation options. However, doing this is a matter of style and preference. There is nuance here.
+For point 2., the Darien approach is to return those exceptions you can wrapped in a ``FailureException``. This style is preferred over throwing an exception as where it is caught might be a long way from the point of generation, reducing options for addressing the issue. However, doing this is a matter of style and preference.
 
-Code that searches for an item in one way or another is quite common. a search mail fail as the otem cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
+Code that searches for an item is common. A search will fail when the item cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
 .. code-block:: java
   :linenos:
@@ -215,14 +216,18 @@ If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` 
    :linenos:
 
    private Success<String> rhs(String input) {
-       try {
-           return new SuccessImpl<String>(input.split("-")[1]);
-       } catch(ArrayIndexOutOfBoundsException oobe) {
-           return new FailureExceptionImpl<String>(oobe);
+       if(FailureUtils.oneIsNull(input)) {
+        	return FailureUtils.theNull(input);
+        }
+
+       if(input.indexOf("-") == -1) {
+         return new FailureValueImpl(-1);
+       } else {
+         return new SuccessImpl<String>(input.split("-")[1]);
        }
    }
 
-The above code is an improvement but it doesn't handle all error cases, e.g., ``input`` might be ``null`` or a character set test may be required before the split on the hyphen is executed.
+If ``input`` is null or input does not contain a hyphen, these cases are explicitly handled.
 
 Resources
 ---------
