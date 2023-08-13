@@ -2,16 +2,16 @@ Using the Darien Library
 ========================
 
 It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. And today your challenge is to 
-retrieve a field from a Java object, even when that field is marked private, so you develop ``getField`` below.
+retrieve a field from a Java object, even when that field is marked private, so you develop a first version of ``getField`` below.
 
-You then write a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required name of the field, its classname, and the object the 
+You write a couple of unit tests to be sure that what you have written retrieves a named field. For each test, you pass in the required name of the field, its classname, and the object the 
 field is to be retrieved from.
 
 Your tests work, and you deploy your code.
 
 .. code-block:: java
    :linenos:
-   :caption: Your initial implementation of ``getField``
+   :caption: Your first version of ``getField``
    :emphasize-lines: 3-6
 
    public static Object getField(String classname, String fieldname, Object inst) {
@@ -61,6 +61,7 @@ The rewrite of the above is:
 
 .. code-block:: java
    :linenos:
+   :caption: Your second version of ``getField`` based on the Darien Library
    :emphasize-lines: 1, 2-4, 10
 
    public static S getField(String cn, String fn, Object inst) {
@@ -90,23 +91,21 @@ The rewrite of the above is:
       		}
    }
 
-``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
-an instance of the type ``FailureArgIsNull`` that lists which of the arguments is null as a string along with the filename and line where this instance was created. This is useful when tracing issues in
-deployed, live systems.
+``getField`` returns an instance of type ``S``. All of the method parameters are checked by ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
+an instance that will tell you which of the arguments is null, along with the filename and line where this instance was created. This is useful when tracing issues in deployed, live systems.
 
 Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
 
 The ``ExceptionInInitializerError`` and all of the exceptions are caught and returned wrapped in an appropriate ``Failure`` type, ``Ferr`` or ``FExp``.
 
-.. Considering the failure cases helps you write better tests.
-
 Calling ``getField``
 --------------------
 
-The invocation of the rewritten ``getField`` is:
+The invocation of the rewritten ``getField`` is below which you do not need to write. Darien tool support can write it for you:
 
 .. code-block:: java
    :linenos:
+   :caption: The Success and Failure Handling Code
 
    FailureArgIsFalse faif = FailureUtils.theFalse(new Boolean[] {false, false});    	
    S obj = TestUtils.getField("org.darien.types.impl.ArgsList", "idxs", faif);
@@ -122,24 +121,24 @@ The invocation of the rewritten ``getField`` is:
         case FailureError err -> assertTrue(err.getLocation(), false);
         case FailureException exp -> assertTrue(exp.getLocation(), false);
         case FailureArgIsNull fain -> assertTrue(fain.getLocation(), false);
-        default -> System.out.println("As currently written, not possible.");
+        default -> assertTrue(false);
       }
     }
 
-The above code is taken from a unit test and you do not need to write it, Darien tool support writes it for you.
+The above code is taken from a Daren Library unit test.
 
-``getField`` (line 2) is called with a classname, fieldname and instance.
+``getField`` (line 2) is called with a classname, fieldname(``idxs``) and instance.
 
 An object (``obj``) of type ``S`` is returned. If ``eval`` returns true, ``obj`` represents the success case and ``unwrap`` is called. Otherwise, the call has failed and the ``switch`` on  line 11
 is executed.
 
 In the success case, ``unwrap`` returns the result from line 10 of the implementation of ``getField`` above (``fld.get(inst)``).
 
-If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail. In each case, an assertion
-fails, passing a string message from ``getLocation`` that describes where in the code the failure type was created.
+If the failure path is run, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure objects generated from the eight ways the method can fail (``err``, ``exp`` and ``fain``).
+In this case, an assertion fails, passing a string message from ``getLocation`` that describes where in the code the failure occurred.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
-case or else the default would exceute.
+case for that new type or the default would exceute. This is the reason the default case generates an assertion failure.
 
 Advantages of this Approach
 ---------------------------
@@ -150,6 +149,5 @@ The advantages of this approach are:
 2. The different ways that ``getField`` can fail has been captured in code
 3. No ``null`` value has been returned from ``gettField``
 4. The code to handle the two path is standard and easy to follow
-5. Darien tool supports will write all of the code above so that you can focus on what you need to do
-
-.. Considering the failure cases helps you write better tests.
+5. Darien tool supports writes the success and failure handling code above so that you can focus on what you need to do
+6. Considering the failure cases helps you write better tests
