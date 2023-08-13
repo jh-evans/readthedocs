@@ -57,7 +57,9 @@ You decide to rewrite the above using the Darien Library.
 The Darien Library
 ==================
 
-The rewrite of the above is:
+The rewrite wraps your results in Darian Libray objects and tool support generates the code to unwrap them.
+
+The code above becomes:
 
 .. code-block:: java
    :linenos:
