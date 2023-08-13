@@ -38,7 +38,7 @@ All failure-describing types (``FailureValue``, ``FailureException`` and others)
 ``eval`` to ``true``. ``eval`` on ``Failure`` and its subtypes returns ``false``. Within the failure path (the else), the appropriate failure instance (``fv`` or ``fe``) is created via the type switch.
 That is it.
 
-This approach focuses on the different kinds of failure, cleanly separating the various cases, and tool supports write the handling code.
+This approach focuses on the different kinds of failure, cleanly separating all cases, and tool supports write the handling code.
 
 .. theDetail:
 The Detail
