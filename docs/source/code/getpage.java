@@ -1,4 +1,4 @@
-   public Success<String> getPage(String url) {
+   public S getPage(String url) {
        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
            final HttpGet httpget = new HttpGet(url);
    
@@ -7,13 +7,13 @@
            });
    
            if(result.status_code >= 200 && result.status_code <= 299) {
-                   return new SuccessImpl<String>(result.page);
+                   return new Success(result.page);
            } else {
-                   return new FailureValueImpl<String>(result.status_code);
+                   return new FV(result.status_code);
            }
        } catch(java.io.IOException ioe) {
-               return new FailureExceptionImpl<String>(ioe);
+               return new FExp(ioe);
        } catch(Exception e) {
-               return new FailureExceptionImpl<String>(e);
+               return new FExp(e);
        }
    }
