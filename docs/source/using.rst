@@ -93,7 +93,7 @@ The code above becomes:
    }
 
 ``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
-an instance of the type ``FailureArgIsNull`` that lists which of the arguments is null as a string along with the filename and line where this instance was created. This is useful when tracing issues in
+an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where this instance was created. This is useful when tracing issues in
 deployed, live systems.
 
 Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
