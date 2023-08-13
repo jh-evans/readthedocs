@@ -26,9 +26,9 @@ We handle the two failure cases like this (the implementation of ``getPage`` is 
 
 The ``switch`` on ``page`` above is an example of pattern matching, released in Java SE 17 (https://openjdk.org/jeps/406) \[2\].
 
-Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 failure being returned, passed back wrapped in a ``FailureValue``.
+Running the above code, attempting to retrieve ``https://www.example.com/nosuchpage`` will result in a 404 value being returned, wrapped in a ``FailureValue``.
 
-When the code is passed ``https://www.cannotfindthisdomain.com``, ``getPage`` below returns an instance of ``FailureException``.
+When ``getPage`` is passed ``https://www.cannotfindthisdomain.com``, an instance of ``FailureException`` is returned.
 
 .. literalinclude:: /code/main_failurexception.java
    :language: java
