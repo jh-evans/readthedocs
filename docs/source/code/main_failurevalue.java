@@ -7,7 +7,7 @@ public static void main(String[] argv) {
     if(obj.eval()) {
         System.out.println("Success");
     } else {
-        switch (page) {
+        switch (obj) {
             case FailureValue<String> fv -> System.out.println(fv.getValue());
             case FailureException<String> fe -> System.out.println(fe.getException());
             default  -> System.out.println("As currently written, not possible.");
