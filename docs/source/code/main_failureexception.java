@@ -1,7 +1,7 @@
    public static void main(String[] argv) {
        Main m = new Main();
 
-      // When called like this,  returns an instance of FailureException
+      // Returns an instance of FailureException
        S obj = m.getPage("https://www.cannotfindthisdomain.com");
    
        if(obj.eval()) {
