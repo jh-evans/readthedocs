@@ -1,10 +1,10 @@
    public S getPage(String url) {
        if(FailureUtils.oneIsNull(url)) {
-        	return FailureUtils.theNull(url);
+           return FailureUtils.theNull(url);
         }
 
        if(new URL(url).getProtocol().equals("http")) {
-         return new FAFC(url));
+           return new FAFC(url));
        }
 
        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
