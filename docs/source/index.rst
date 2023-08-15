@@ -85,7 +85,7 @@ If ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a 
    :language: java
    :linenos:
 
-Although ``getPage`` looks perfectly reasonable, ``url`` may be null. Or ``url`` should be rejected if it does not use SSL (https).
+Although ``getPage`` looks perfectly reasonable, ``url`` may be null. Or ``url`` should be rejected if it does not use SSL (https), as implemented below.
 
 .. literalinclude:: /code/getpage-checked-url.java
    :language: java
