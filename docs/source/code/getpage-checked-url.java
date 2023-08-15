@@ -3,7 +3,7 @@
         	return FailureUtils.theNull(url);
         }
 
-       if(url.startsWith("http:")) {
+       if(new URL(url).getProtocol().equals("http")) {
          return new FAFC(url));
        }
 
