@@ -85,14 +85,17 @@ If ``url`` is ``https://www.example.com/nosuchpage``, ``getPage`` will return a 
    :language: java
    :linenos:
 
-``Result`` is a ``static class`` defined in the same class as ``getPaage`` used to pass the response code and the retrieved webpage from ``execute`` so it can be assigned to ``result``.
+Although ``getPage`` looks perfectly reasonable, ``url`` may be null or malformed. Or ``url`` should be rejected if it does not use SSL (https).
+
+.. literalinclude:: /code/getpage-checked-url.java
+   :language: java
+   :linenos:
+
+Note: ``Result`` is a ``static class`` defined in the same class as ``getPaage`` that passes the response code and the retrieved webpage from ``execute`` so it can be assigned to ``result``.
 
 .. literalinclude:: /code/result.java
    :language: java
    :linenos:
-
-In fact, ``getPage`` looks perfectly reasonable, ``url`` may be null or malformed. In addition, the author of ``getPage`` may decide that any use of
-``http`` should be rejected as only ``https`` is to be supported for security reasons.
 
 .. Generics:
 Generics
