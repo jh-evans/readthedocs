@@ -100,19 +100,21 @@ Note: ``Result`` is a ``static class`` defined in the same class as ``getPaage``
 .. Generics:
 Generics
 ----------
-Types ``S`` and ``F`` do not use generics. This means that the ``unwrap`` call on ``obj`` must be cast to the type you are interested in. A generic ``S<T>`` would remove the need for the cast. 
-However, in the failure case (which has more types), you would be required to enter the generic type for the success case, e.g., ``FailureValue<String>``, which is redundant as the failure types are
-containers for failure objects. Generics have not been used to ensure code brevity.
+
+Types ``S`` and ``F`` do not use generics. This means that you must explicitly cast the result of ``unwrap``. A generic ``S<T>`` would remove the need for the cast. However, in the failure case
+(which has more types), you would be required to enter the generic type for the success case, e.g., ``FailureValue<String>``, which is redundant as failure types are containers for failure objects.
+Primarily, generics have not been used to ensure code brevity.
 
 Using Interfaces
 ----------------
 
-You will note that ``Success``, ``Failure``, and all the failure-describing types, are Java interfaces. You use these types when *using* the library, as a consumer, as in the ``main`` methods
+You will note that ``S``, ``F``, and all the failure-describing types, are Java interfaces. You use these types when *using* the library, as a consumer, as in the ``main`` methods
 in quickStart_.
 
-When you base your code on the library, as a producer of success and failure cases, you use an *implementation* of these types as you can see in getPage_ (such as ``SuccessImpl``).
+When you produce success and failure cases, you use an *implementation* class of these types, as in getPage_ (such as the class ``Success``).
 
-As an engineer, you reason about success and failure and how to handle these cases using the types. You give these types concrete meaning at run-time by using the ``Impl`` classes. In this code design, classes are purely a mechanism for expressing code and its reuse.
+As an engineer, you reason about success and failure and how to handle these cases using the types. You give these types concrete meaning at run-time by using the classes in ``org.darien.types.impl``. In
+this code design, classes are purely a mechanism for expressing code and its reuse.
 
 Focusing on Failure Leads to More Robust Code
 ---------------------------------------------
@@ -123,24 +125,23 @@ By focusing on failure, we see that:
 2. All code paths are terminated at a ``return``
 3. Any code that searches for something can fail
 
-One way to address the first point is to use pre-conditions, returning an appropriate failure instance on pre-condition failure. The Darien Library supports you here with its calls to ``FailureUtils.oneIsNull`` and
-``FailureUtils.theNull``.
+The Darien approach is to check parameter values for ``null``, returning an appropriate failure instance. The library supports you here with its calls to ``FailureUtils.oneIsNull``
+and ``FailureUtils.theNull``.
 
-For point 2., the Darien approach is to return those exceptions you can wrapped in a ``FailureException``. This style is preferred over throwing an exception as where it is caught might be a long way from the point of generation, reducing options for addressing the issue. However, doing this is a matter of style and preference.
+For point 2., the Darien approach is to return exceptions wrapped in a ``FailureException``. This style is preferred over throwing an exception because where an exception is caught might be a long way
+from where it is generated, reducing options for addressing the issue. However, adopting this style is a matter of preference.
 
-Code that searches for an item is common. A search will fail when the item cannot be found. The following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
+All code that searches for something can fail when the item cannot be found. To highlight this, the following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
 .. literalinclude:: /code/rhs.java
    :language: java
    :linenos:
 
-If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` is ``hyphenated``, an ``ArrayIndexOutOfBoundsException`` will be raised. This code addresses the problem:
+If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` is ``hyphenated``, an ``ArrayIndexOutOfBoundsException`` will be raised. This code handles that failure case:
 
 .. literalinclude:: /code/rhs_darien_version.java
    :language: java
    :linenos:
-
-If ``input`` is null or input does not contain a hyphen, these cases are explicitly handled.
 
 Resources
 ---------
