@@ -75,7 +75,7 @@ The failure-describing types below (such as ``FailureValue``) are wrappers aroun
    :linenos:
 
 .. getPage:
-`getPage`
+getPage
 --------
 
 When ``url`` is ``https://www.cannotfindthisdomain.com``, ``getPage`` returns a ``FailureException`` that wraps the thrown ``java.net.UnknownHostException``.
