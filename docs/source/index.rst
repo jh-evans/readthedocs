@@ -109,7 +109,7 @@ Using Interfaces
 ----------------
 
 You will note that ``S``, ``F``, and all the failure-describing types, are Java interfaces. You use these types when *using* the library, as a consumer, as in the ``main`` methods
-in quickStart_.
+in Quick Start above.
 
 When you produce success and failure cases, you use an *implementation* class of these types, as in getPage_ (such as the class ``Success``).
 
@@ -119,11 +119,11 @@ this code design, classes are purely a mechanism for expressing code and its reu
 Focusing on Failure Leads to More Robust Code
 ---------------------------------------------
 
-By focusing on failure, we see that:
+By focusing on failure with the above approach, we see that:
 
 1. Any method parameter can cause your code to fail
 2. All code paths are terminated at a ``return``
-3. Any code that searches for something can fail
+3. Any search code can fail
 
 The Darien approach is to check parameter values for ``null``, returning an appropriate failure instance. The library supports you here with its calls to ``FailureUtils.oneIsNull``
 and ``FailureUtils.theNull``.
@@ -131,7 +131,8 @@ and ``FailureUtils.theNull``.
 For point 2., the Darien approach is to return exceptions wrapped in a ``FailureException``. This style is preferred over throwing an exception because where an exception is caught might be a long way
 from where it is generated, reducing options for addressing the issue. However, adopting this style is a matter of preference.
 
-All code that searches for something can fail when the item cannot be found. To highlight this, the following extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
+All code that searches for something (or that looks something up or relies on something being present) can fail when the item assumed to be there is absent. To highlight this, the following
+extracts the right-hand side of a string containing a hyphen of the form "lhs-rhs".
 
 .. literalinclude:: /code/rhs.java
    :language: java
