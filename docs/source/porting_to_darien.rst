@@ -13,20 +13,5 @@ As we know, it is possible for parameters to be null. In this case, even if not 
 
 On looking at the code, it appears that if ``filename`` refers to a file that does not exist, a ``FileNotFoundException`` would be thrown. However, in this case, that can never happen. This is because
 ``FileNotFoundException`` is a subclass of ``IOException`` and so ``FileNotFoundException`` will be caught at the catch for ``IOException``. If this occurs, the code prints the stack trace and returns an
-empty string as the string builder has not had any data appended to it. This may or may not be the intended behaviour as we cannot tell the difference between a file that does not exist and one that does 
-exist, which is zero length, other than watching for a stacktrace on standard output if it is available.
-
-public String getFile(String filename) throws FileNotFoundException {
-    String line;
-    StringBuilder resultStringBuilder = new StringBuilder();
-    
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
-        while ((line = br.readLine()) != null) {
-            resultStringBuilder.append(line).append("\n");
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
-    return resultStringBuilder.toString();
-}
+empty string as the string builder has not had any data appended to it. This may or may not be the intended behaviour. But it's worse. We cannot tell the difference between a file that does not exist and one
+that does exist, which is zero length, other than watching for a stacktrace on standard output if it is available.
