@@ -17,15 +17,16 @@ empty string as the string builder has not had any data appended to it. This may
 exist, which is zero length, other than watching for a stacktrace on standard output if it is available.
 
 public String getFile(String filename) throws FileNotFoundException {
-		String line;
-		StringBuilder resultStringBuilder = new StringBuilder();
-	    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
-	        while ((line = br.readLine()) != null) {
-	            resultStringBuilder.append(line).append("\n");
-	        }
-	    } catch (IOException e) {
-			e.printStackTrace();
-		}
-	
-	    return resultStringBuilder.toString();
-	}
+    String line;
+    StringBuilder resultStringBuilder = new StringBuilder();
+    
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
+        while ((line = br.readLine()) != null) {
+            resultStringBuilder.append(line).append("\n");
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return resultStringBuilder.toString();
+}
