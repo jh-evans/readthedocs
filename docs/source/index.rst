@@ -1,6 +1,5 @@
 .. toctree::
 
-   index
    using
 
 The Darien Project
