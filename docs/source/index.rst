@@ -1,5 +1,7 @@
 .. toctree::
-   :maxdepth: 2
+
+   index
+   using
 
 The Darien Project
 ==================
