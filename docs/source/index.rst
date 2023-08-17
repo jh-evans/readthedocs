@@ -144,8 +144,8 @@ If ``input`` is ``hyphen-ated``, ``rhs`` will return ``ated``. But if ``input`` 
    :language: java
    :linenos:
 
-Other Drain Project Documentation
----------------------------------
+Other Darien Project Documentation
+----------------------------------
 
 1. `Using the Darien Library <https://darien-project.readthedocs.io/en/latest/using.html>`_
 2. `Porting your code to the Darien Library <https://darien-project.readthedocs.io/en/latest/porting_to_darien.html>`_
