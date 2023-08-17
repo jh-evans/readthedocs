@@ -1,5 +1,4 @@
 .. toctree::
-   :depth: 1
 
    using
 
