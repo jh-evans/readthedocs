@@ -1,8 +1,3 @@
-.. toctree::
-
-   using
-   porting_to_darien
-
 The Darien Project
 ==================
 
