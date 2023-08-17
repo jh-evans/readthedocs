@@ -3,6 +3,10 @@ Porting your code to the Darien Library
 
 It's really straightforward. Let's assume you have the following code:
 
+.. literalinclude:: /code/original_getfile.java
+   :language: java
+   :linenos:
+
 It is a truth seldom acknowledged that developers mostly focus on the `Happy Path <https://en.wikipedia.org/wiki/Happy_path>`_. Developers are busy with lots to do. And today your challenge is to 
 retrieve a field from a Java object, even when that field is marked private, so you develop ``getField`` below.
 
