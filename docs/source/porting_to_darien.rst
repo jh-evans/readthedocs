@@ -49,7 +49,7 @@ Re-writing the code
 3. Line 18 wraps an ``IOException`` into a returned value. If an empty string is returned at line 21, the caller can be confident the file was zero length, removing our ambiguity
 4. Line 21 wraps the file contents
 
-For point 2. if the file exists at line 7 but does not at line 13, an ``IOException`` will wrapped and returned inside a ``FailureException`` type.
+For point 2., if the file exists at line 7 but does not at line 13, an ``IOException`` will be wrapped and returned inside a ``FailureException`` type.
 
 An additional case should be considered. Some of a file could have been read into ``resultStringBuilder`` when an ``IOException`` is raised. If this is the case, the rewrite ignores
 the partially read file by returning the failed exception object at line 18. If this partially read file should be passed back, an instance of the type ``FailurePartialResult`` can be used.
