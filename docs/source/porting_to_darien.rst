@@ -32,8 +32,7 @@ Looking at the above code:
 
 1. ``filename`` may be null
 2. A valid filename may refer to a file that does not exist
-3. An ``IOException`` that is not a file not found issue may occur, e.g., in between the file being successfully opened at the ``try`` on line 5 above and the contents being read with ``readLine``, the
-file may become unavailable
+3. An ``IOException`` that is not a file not found issue may occur, e.g., in between the file being successfully opened at the ``try`` on line 5 above and the contents being read with ``readLine``, the file may become unavailable
 4. The code either returns an empty string or the contents of the file
 
 For point 3., it is ``readLine`` that might throw an ``IOException`` and the number of ways an ``IOException`` might be raised is varied. For example, the drive the file resides on --- such as a USB thumb drive --- could be removed from the system. Or an external process deletes the file.
