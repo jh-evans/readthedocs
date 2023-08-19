@@ -14,8 +14,8 @@ arise because of an attempt to use the integer as if it was another type *cannot
 
 When you write code to put a file onto disk, you are likely to make sure that there is enough space to accommodate the file write. Your goal is to write code to successfully write data to disk. What do you 
 need to help you achieve that goal? Enough disk space. However, available space is an assumption that eventually will be false. The disk where you are writing the data can, at any point, be too full to
-accommodate the write operation. When this happens, your code will fail. As it is possible for the write to fail, code must be written to handle that eventuality, however unlikely. Even though the probability
-of failure is low, it is not zero. And there is no way to prove that it is zero.
+accommodate the write operation. When this happens, your code will fail. As it is possible for the write to fail, code must be written to handle that eventuality, however unlikely. Even when the probability
+of failure is low, it is not zero. And in this case there is no way to prove that it is zero.
 
 Notes
 -----
