@@ -20,9 +20,12 @@ is no way to prove that it is zero. Not because a yet-to-be-discovered proof exi
 Program Resources
 -----------------
 
-Programming is about managing resources. And because they are external to your program, and not within your control, changes to them can break any assumptions you have built into your code. A file write
-that has always worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you can see no reason why it should fail. You run your test rig in
-production and it fails. You look at the disk and discover it has been marked as read-only since the last reboot.
+Programming is about managing resources. And because they are external to your program, and not within your control, external changes can break your code. A file write that has always worked may mysteriously
+start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail. You look at the
+disk and discover it has been marked as read-only since the last reboot.
+
+When code fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why test outcomes from local and production environments can yield confusing results.
+As a rule of thumb if code works locally but not in some other enviornment, it is worth finding out what it is in the other *environment* that is different.
 
 Notes
 -----
