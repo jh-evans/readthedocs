@@ -20,12 +20,19 @@ is no way to prove that it is zero. Not because a yet-to-be-discovered proof exi
 Program Resources
 -----------------
 
-Programming is about managing resources. And because they are external to your program, and not within the control of your program, external changes can break your code. A file write that has always
-worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail.
-You look at the disk and discover it has been marked as read-only since the last reboot.
+Programming is about managing resources. And because they are external to your program, and not within its control, external changes can break your code. A file write that has always
+worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail. Later, you discover the disk was marked as read-only during the last reboot.
 
-When code fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why comparing test outcomes from local and production environments can yield confusing
-results. As a rule of thumb, if code works locally but not in some other enviornment, it is worth finding out what it is in the other *environment* that is different.
+When code fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why comparing test outcomes from local and production environments can yield
+aparently confusing results. As a rule of thumb, if code works locally but not in some other enviornment, it is worth finding out what it is in the other *environment* that is different and how that
+external difference is affecting your code.
+
+Reacting to Exceptional Circumstances
+-------------------------------------
+
+There are cases in code when all you can do in an exceptional circumstance is to log that the event happened and to ensure that your program can keep going.
+
+catching an exception and logging it is not handling the error, it is recording that it happened. Do you have a test for this case? No, of course not, no one does.
 
 Notes
 -----
