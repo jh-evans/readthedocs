@@ -25,18 +25,18 @@ Your tests work, and you deploy your code.
        	} catch (ClassNotFoundException cnfe) {
        		log(cnfe);
        	} catch (NoSuchFieldException nsfe) {
-       		log(nsfe);
-   		} catch (SecurityException se) {
-       		log(se);
-   		} catch (IllegalArgumentException ile) {
-       		log(ile);
-   		} catch (NullPointerException npe) {
-       		log(npe);
-   		} catch (IllegalAccessException iae) {
-       		log(iae);
-   		}
+            log(nsfe);
+         } catch (SecurityException se) {
+            log(se);
+         } catch (IllegalArgumentException ile) {
+            log(ile);
+         } catch (NullPointerException npe) {
+            log(npe);
+         } catch (IllegalAccessException iae) {
+            log(iae);
+         }
        	
-       	return null;
+         return null;
    }
 
 However, there are a number of points to note:
