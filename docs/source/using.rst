@@ -93,7 +93,7 @@ The code above becomes:
    }
 
 ``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
-an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where this instance was created. This is useful when tracing issues in
+an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where the call to ``theNull`` takes place. This is useful when tracing issues in
 deployed, live systems.
 
 Line 10 returns the retrieved field, wrapped in a ``Success`` class that implements the ``S`` type.
@@ -105,7 +105,7 @@ The ``ExceptionInInitializerError`` and all of the exceptions are caught and ret
 Calling ``getField``
 --------------------
 
-The invocation of the rewritten ``getField`` is:
+The invocation of the rewritten ``getField`` is this which is taken from a unit test.
 
 .. code-block:: java
    :linenos:
@@ -128,7 +128,7 @@ The invocation of the rewritten ``getField`` is:
       }
     }
 
-The above code is taken from a unit test and you do not need to write it, Darien tool support writes it for you.
+Darien tool support writes the ``if``, ``obj.unwrap``, ``else`` and pattern matchine ``switch``. The code writing tool will output code compatible with pre 17 Java for those that do not use the pattern matching preview feature.
 
 ``getField`` (line 2) is called with a classname, fieldname and instance.
 
@@ -138,7 +138,7 @@ is executed.
 In the success case, ``unwrap`` returns the result from line 10 of the implementation of ``getField`` above (``fld.get(inst)``).
 
 If the failure path is execued, the ``switch`` on ``obj`` executes and ``obj`` is cast into one of the three failure types generated from the eight ways the method can fail (``FailureError``,
-``FailureException```, and ``FailureArgIsNull``). In each case, an assertion fails (on the righthand side of the ->), passing in a string message from ``getLocation`` that describes where in the
+``FailureException``, and ``FailureArgIsNull``). In each case, an assertion fails (on the righthand side of the ->), passing in a string message from ``getLocation`` that describes where in the
 code the failure type was created.
 
 As written, the default case cannot execute as ``obj`` will only be one of the three failure types. If ``getField`` returned an additional type, the switch would have to be updated with an explicit
@@ -150,7 +150,7 @@ Advantages of this Approach
 The advantages of this approach are:
 
 1. The failure and success paths are now explicit
-2. The different ways that ``getField`` can fail has been captured in code
+2. The different ways that ``getField`` can fail have been captured in code
 3. No ``null`` value has been returned from ``gettField``
 4. The code to handle the two path is standard and easy to follow
 5. Darien tools generate the code above so that you can focus on what you need to do
