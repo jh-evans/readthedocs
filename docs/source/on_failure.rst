@@ -20,15 +20,24 @@ is no way to prove that it is zero. Not because a yet-to-be-discovered proof exi
 Program Resources
 -----------------
 
-Programming is about managing resources. And because they are external to your program, and not within its control, external changes can break your code. A file write that has always
-worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail. Later, you discover the disk was marked as read-only during the last reboot.
+Programming is about managing resources. And because these resources are external to your program, and not within its control, external changes can break your code. A file write that has always
+worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail. Later, you discover the disk was marked as
+read-only during the last reboot.
 
-When code fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why comparing test outcomes from local and production environments can yield
+When programs fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why comparing test outcomes from local and production environments can yield
 aparently confusing results. As a rule of thumb, if code works locally but not in some other enviornment, it is worth finding out what it is in the other *environment* that is different and how that
 external difference is affecting your code.
 
-Reacting to Exceptional Circumstances
--------------------------------------
+Responding to Failure
+---------------------
+
+When you call a function or method, that code is either going to give you the result you want or something else is going to happen. There are three places that can respond to a non-success outcome:
+
+1. The called code
+2. The calling code
+3. Some other piece of code
+
+
 
 There are cases in code when all you can do in an exceptional circumstance is to log that the event happened and to ensure that your program can keep going.
 
