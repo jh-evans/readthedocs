@@ -14,30 +14,30 @@ Your tests work, and you deploy your code.
    :caption: Your initial implementation of ``getField``
    :emphasize-lines: 3-6
 
-   public static Object getField(String classname, String fieldname, Object inst) {
-       	try {
-       		Class<?> cls = Class.forName(classname);
-       		Field fld = cls.getDeclaredField(fieldname);
-       		fld.setAccessible(true);
-       		return fld.get(inst);
-       	} catch (ExceptionInInitializerError eiie) {
-       		log(eiie);
-       	} catch (ClassNotFoundException cnfe) {
-       		log(cnfe);
-       	} catch (NoSuchFieldException nsfe) {
-            log(nsfe);
-         } catch (SecurityException se) {
-            log(se);
-         } catch (IllegalArgumentException ile) {
-            log(ile);
-         } catch (NullPointerException npe) {
-            log(npe);
-         } catch (IllegalAccessException iae) {
-            log(iae);
-         }
-       	
-         return null;
-   }
+public static Object getField(String classname, String fieldname, Object inst) {
+      try {
+         Class<?> cls = Class.forName(classname);
+         Field fld = cls.getDeclaredField(fieldname);
+         fld.setAccessible(true);
+         return fld.get(inst);
+      } catch (ExceptionInInitializerError eiie) {
+         log(eiie);
+      } catch (ClassNotFoundException cnfe) {
+         log(cnfe);
+      } catch (NoSuchFieldException nsfe) {
+         log(nsfe);
+      } catch (SecurityException se) {
+         log(se);
+      } catch (IllegalArgumentException ile) {
+         log(ile);
+      } catch (NullPointerException npe) {
+         log(npe);
+      } catch (IllegalAccessException iae) {
+         log(iae);
+      }
+      
+      return null;
+}
 
 However, there are a number of points to note:
 
@@ -65,32 +65,32 @@ The code above becomes:
    :linenos:
    :emphasize-lines: 1, 2-4, 10
 
-   public static S getField(String cn, String fn, Object inst) {
-            if(FailureUtils.oneIsNull(cn, fn, inst)) {
-              	return FailureUtils.theNull(cn, fn, inst);
-            }
-      
-          	try {
-          		Class<?> cls = Class.forName(cn);
-          		Field fld = cls.getDeclaredField(fn);
-          		fld.setAccessible(true);
-          		return new Success(fld.get(inst));
-          	} catch (ExceptionInInitializerError eiie) {
-              	return new FErr(eiie);
-          	} catch(ClassNotFoundException cnfe) {
-          		return new FExp(cnfe);
-          	} catch (NoSuchFieldException nsfe) {
-          		return new FExp(nsfe);
-      		} catch (SecurityException se) {
-          		return new FExp(se);
-      		} catch (IllegalArgumentException ile) {
-          		return new FExp(ile);
-      		} catch (NullPointerException npe) {
-          		return new FExp(npe);
-      		} catch (IllegalAccessException iae) {
-          		return new FExp(iae);
-      		}
-   }
+public static S getField(String cn, String fn, Object inst) {
+    if (FailureUtils.oneIsNull(cn, fn, inst)) {
+        return FailureUtils.theNull(cn, fn, inst);
+    }
+
+    try {
+        Class<?> cls = Class.forName(cn);
+        Field fld = cls.getDeclaredField(fn);
+        fld.setAccessible(true);
+        return new Success(fld.get(inst));
+    } catch (ExceptionInInitializerError eiie) {
+        return new FErr(eiie);
+    } catch (ClassNotFoundException cnfe) {
+        return new FExp(cnfe);
+    } catch (NoSuchFieldException nsfe) {
+        return new FExp(nsfe);
+    } catch (SecurityException se) {
+        return new FExp(se);
+    } catch (IllegalArgumentException ile) {
+        return new FExp(ile);
+    } catch (NullPointerException npe) {
+        return new FExp(npe);
+    } catch (IllegalAccessException iae) {
+        return new FExp(iae);
+    }
+}
 
 ``getField`` returns an instance of the type ``S``. All of the method parameters are passed to ``FailureUtils.oneIsNull``, which returns ``true`` if one of them is null. ``FailureUtils.theNull`` returns
 an instance of the type ``FailureArgIsNull`` that lists the arguments that are null along with the filename and line where this instance was created. This is useful when tracing issues in
