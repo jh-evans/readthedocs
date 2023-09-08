@@ -31,13 +31,24 @@ external difference is affecting your code.
 Responding to Failure
 ---------------------
 
-When you call a function or method, that code is either going to give you the result you want or something else is going to happen. There are three places that can respond to a non-success outcome:
+When you call a function or method, that code is either going to give you the result you want or something else is going to happen and failures come in two types: tollerable and unrecoverable.
+
+An example of a failure you can tolerate is when looking for a substring in a longer piece of text. If you find it, the longer string conforms to what you need. Without the substring, you consider the longer text invalid and you can easily write code to
+reject use of the longer string. This failure situation is tolerable as the whole algorithm has not failed, just the lookup for the substring --- which is a natural part of checking the longer string for compliance. Importantly, this failure is a normal
+part of your algorithm.
+
+Unrecoverable errors tend to stop your algorithm from making meaningful further progress. An example is invoking a remote service. If the sevice cannot be accessed (you have no network access from your mobile device), your code will not receive a response
+from the service and any decision on what to do next in your algorithm cannot be made. All your code can do is fail in a way that does not adversely affect the rest of the algorithm, typically by logging the service outage.
+
+spectrum of failure types
+
+There are three places that can respond to a non-successful outcome:
 
 1. The called code
 2. The calling code
 3. Some other piece of code
 
-
+If a failure has occurred in the called code --- memory or the network is not available
 
 There are cases in code when all you can do in an exceptional circumstance is to log that the event happened and to ensure that your program can keep going.
 
