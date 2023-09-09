@@ -31,14 +31,18 @@ external difference is affecting your code.
 Responding to Failure
 ---------------------
 
-When you call a function or method, that code is either going to give you the result you want or something else is going to happen and failures come in two types: tollerable and unrecoverable.
+When you call a function or method, that code is either going to give you the result you want or something else is going to happen and failures come in three types: normal, abnormal, process-wide.
 
-An example of a failure you can tolerate is when looking for a substring in a longer piece of text. If you find it, the longer string conforms to what you need. Without the substring, you consider the longer text invalid and you can easily write code to
-reject use of the longer string. This failure situation is tolerable as the whole algorithm has not failed, just the lookup for the substring --- which is a natural part of checking the longer string for compliance. Importantly, this failure is a normal
-part of your algorithm.
+An example of a normal failure is when looking for a substring in a longer piece of text. If you find it, the longer string conforms to what you need. Without the substring, you consider the
+longer text invalid and you can easily write code to reject it.  This failure situation is tolerable as only the lookup has failed, not the whole program.  Importantly, this failure is a normal part of
+your code.
 
-Unrecoverable errors tend to stop your algorithm from making meaningful further progress. An example is invoking a remote service. If the sevice cannot be accessed (you have no network access from your mobile device), your code will not receive a response
-from the service and any decision on what to do next in your algorithm cannot be made. All your code can do is fail in a way that does not adversely affect the rest of the algorithm, typically by logging the service outage.
+An abnormal error tends to stop your code from making meaningful further progress. An example is invoking a remote service. If the sevice cannot be accessed (there is no network access), your code cannot
+make any decision on what to do next. All your code can do is stop progress and log the failure. Importantly, your process keeps correctly executing.
+
+A process-wide failure is more serious. The abnoraml failure has prevented further progress by your process keeps going and is able to invoke the remote service again. A process-wide error is one that stops your whooe process from executing --- if your code only writes to disk and you can't, that's process-wide.
+
+
 
 spectrum of failure types
 
