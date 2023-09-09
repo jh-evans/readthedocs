@@ -31,25 +31,28 @@ external difference is affecting your code.
 Responding to Failure
 ---------------------
 
-When you call a function or method, that code is either going to give you the result you want or something else is going to happen and failures come in three types: normal, abnormal, process-wide.
+When you call a function or method, that code is either going to give you the result you want or something else is going to happen. Failure comes in three types: normal, no-progress, process-wide.
 
 An example of a normal failure is when looking for a substring in a longer piece of text. If you find it, the longer string conforms to what you need. Without the substring, you consider the
-longer text invalid and you can easily write code to reject it.  This failure situation is tolerable as only the lookup has failed, not the whole program.  Importantly, this failure is a normal part of
-your code.
+longer text invalid and you can easily write code to reject it.  Importantly, this failure is a normal part of your code.
 
-An abnormal error tends to stop your code from making meaningful further progress. An example is invoking a remote service. If the sevice cannot be accessed (there is no network access), your code cannot
-make any decision on what to do next. All your code can do is stop progress and log the failure. Importantly, your process keeps correctly executing.
+No-progress errors stop your code from making meaningful progress. An example is calling a remote service. If such a sevice cannot be reached (because there is no network access), your code cannot
+make a decision on what is to be done next. Such failure prevents further progress. All that can be done is to log the service access outage but your process keeps correctly executing and will, possibly, be
+able to access the service in future.
 
-A process-wide failure is more serious. The abnoraml failure has prevented further progress by your process keeps going and is able to invoke the remote service again. A process-wide error is one that stops your whooe process from executing --- if your code only writes to disk and you can't, that's process-wide.
+A process-wide failure is more serious. Your process attempts an operation and a failure occurs that causes it to stop, such as running out of memory or an uncaught exception. Nothing can be done but for the
+process to log the error (if possible) and to terminate.
 
+The lines between failure types are not always clear. Without access to the remote service, your program may correctly execute, but is unable to achieve anything useful until the service is back.  Until
+that happens, your program has effectively failed process-wide. It is not providing any value and may as well not be running.
 
+Where in code to Respond to Failure
+-----------------------------------
 
-spectrum of failure types
+There are three locations that can respond to a non-successful outcome:
 
-There are three places that can respond to a non-successful outcome:
-
-1. The called code
-2. The calling code
+1. The called code, e.g., the code that calls a remote service
+2. The calling code that makes use of the called code
 3. Some other piece of code
 
 If a failure has occurred in the called code --- memory or the network is not available
