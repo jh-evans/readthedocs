@@ -21,8 +21,8 @@ Program Resources
 -----------------
 
 Programming is about managing resources. And because these resources are external to your program, and not within its control, external changes can break your code. A file write that has always
-worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they fail. Later, you discover the disk was marked as
-read-only during the last reboot.
+worked may mysteriously start failing in production. You run some tests locally and everything is OK. Looking at your code you see no reason why it should fail. You run your tests in production and they
+fail. Later, you discover the disk was marked as read-only during the last reboot.
 
 When programs fails we must keep in mind that code runs in a context, as one component of a larger system. This is one reason why comparing test outcomes from local and production environments can yield
 aparently confusing results. As a rule of thumb, if code works locally but not in some other enviornment, it is worth finding out what it is in the other *environment* that is different and how that
@@ -40,8 +40,8 @@ No-progress errors stop your code from making meaningful progress. An example is
 make a decision on what is to be done next. Such failure prevents further progress. All that can be done is to log the service access outage but your process keeps correctly executing and will, possibly, be
 able to access the service in future.
 
-A process-wide failure is more serious. Your process attempts an operation and a failure occurs that causes it to stop, such as running out of memory or an uncaught exception. Nothing can be done but for the
-process to log the error (if possible) and to terminate.
+A process-wide failure is more serious. Your process attempts an operation and a failure occurs that causes it to stop running, such as an uncaught exception or running out of memory. Nothing can be done but
+for the process to log the error (if possible) and to terminate.
 
 The lines between failure types are not always clear. Without access to the remote service, your program may correctly execute, but is unable to achieve anything useful until the service is back.  Until
 that happens, your program has effectively failed process-wide. It is not providing any value and may as well not be running.
@@ -51,11 +51,15 @@ Where in code to Respond to Failure
 
 There are three locations that can respond to a non-successful outcome:
 
-1. The called code, e.g., the code that calls a remote service
+1. The called code, e.g., the code that invokes a remote service
 2. The calling code that makes use of the called code
 3. Some other piece of code
 
-If a failure has occurred in the called code --- memory or the network is not available
+Code you call may fail in one of the three ways described above: normal, no-progress or process-wide. If it is process-wide, your program stops as the error is serious enough to prevent it from running
+any more. If failure is normal, the called code is likely to respond to you in such a way that you can handle in the normal course of operation. A no-progress error reported to you will require you to
+report this elsewhere, e.g., to let a user know, or your code will try to recover the situation, possibly by reporting the issue to a third-party process that can rectify the situation.
+
+Relationship between the called code and the calling, called is not quite a blacj box "I can't handle this, you need to know about it or you need to handle it" --- the two cases are confused.
 
 There are cases in code when all you can do in an exceptional circumstance is to log that the event happened and to ensure that your program can keep going.
 
