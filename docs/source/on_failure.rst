@@ -56,8 +56,13 @@ There are three locations that can respond to a non-successful outcome:
 3. Some other piece of code
 
 Code you call may fail in one of the three ways described above: normal, no-progress or process-wide. If it is process-wide, your program stops as the error is serious enough to prevent it from running
-any more. If failure is normal, the called code is likely to respond to you in such a way that you can handle in the normal course of operation. A no-progress error reported to you will require you to
-report this elsewhere, e.g., to let a user know, or your code will try to recover the situation, possibly by reporting the issue to a third-party process that can rectify the situation.
+any more. If failure is normal, the called code will respond in a way that can be handled by the calling code in the normal course of operation. No-progress errors are likely to require reporting elsewhere,
+for example, to inform a user, or your calling code can attempt to recover the situation, possibly by reporting the issue to a third-party process whose role is to rectify the situation.
+
+For the happy path, the called code is a black box. You request the code to do something, it suceeds and you get an appropriate result.
+
+However, when considering the failure path, the called code is not a black box. You request code to perform a task, the code attempts it and reports back to you a failure that indicates detail within the
+black box. This detail is usually required to enable the calling code to respond to the error appropriately. The detail may be remote system not responding or disk write failed.   
 
 Relationship between the called code and the calling, called is not quite a blacj box "I can't handle this, you need to know about it or you need to handle it" --- the two cases are confused.
 
