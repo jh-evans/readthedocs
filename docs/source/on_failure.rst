@@ -51,7 +51,7 @@ Where in code to Respond to Failure
 
 There are three locations that can respond to a non-successful outcome:
 
-1. The called code, e.g., the code that invokes a remote service
+1. The called code, for example, the code that invokes a remote service
 2. The calling code that makes use of the called code
 3. Some other piece of code
 
@@ -59,16 +59,27 @@ Code you call may fail in one of the three ways described above: normal, no-prog
 any more. If failure is normal, the called code will respond in a way that can be handled by the calling code in the normal course of operation. No-progress errors are likely to require reporting elsewhere,
 for example, to inform a user, or your calling code can attempt to recover the situation, possibly by reporting the issue to a third-party process whose role is to rectify the situation.
 
-For the happy path, the called code is a black box. You request the code to do something, it suceeds and you get an appropriate result.
+For the happy path, the called code is a black box. You request the code to do something, it succeeds and you get an appropriate result.
 
-However, when considering the failure path, the called code is not a black box. You request code to perform a task, the code attempts it and reports back to you a failure that indicates detail within the
-black box. This detail is usually required to enable the calling code to respond to the error appropriately. The detail may be remote system not responding or disk write failed.   
+However, when considering the failure path, the called code is not a black box. The called code has failed, reporting information that indicates detail within the black box. This detail is usually
+required to enable the calling code to appropriately respond to the error. The detail may indicate that a remote system is not responding or that a disk write failed.
 
-Relationship between the called code and the calling, called is not quite a blacj box "I can't handle this, you need to know about it or you need to handle it" --- the two cases are confused.
+The called code is communicating, "I have failed because I cannot handle this case, and you need to know about it".
 
-There are cases in code when all you can do in an exceptional circumstance is to log that the event happened and to ensure that your program can keep going.
+There is a fundamental difference between code being made aware of an error and that code being able to successfully resolve an error experienced by some other piece of code.
 
-catching an exception and logging it is not handling the error, it is recording that it happened. Do you have a test for this case? No, of course not, no one does.
+In the current code path, if the calling code cannot address the issue, all that can be done is to log the error and continue processing.
+
+Other code may need to be made aware of the failure. Ideally, code failure is constrained to a small part of the program. If this is not possible, the calling code is returned to some other part of the
+application, the thinking being that some other piece of code can more appropriately respond to the issue.
+
+Importantly, noting that an error has occurred is not the same thing as rectifying the situation so that the error will not happen next time. All we are doing is recording that an error happened. But that is
+all that can be done at times.
+
+This is because the failure occurs outside your program, within an external resource.
+
+If a remote system has failed, the number of reasons for its failure is significant, and its cause will be well beyond the calling code's ability to address. Your code is designed to solve some other
+problem, not rectifying issues in the infrastructure required to enable your code to run. Therefore, when a failure does arise, it is very common that the only response is to log the issue, and move on.
 
 Notes
 -----
