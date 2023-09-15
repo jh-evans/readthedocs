@@ -57,36 +57,36 @@ There are three locations that can respond to a non-successful outcome:
 Code you call may fail in one of the three ways described above: process-wide, normal, no-progress. If it is process-wide, your program stops as the error is serious enough to prevent your entire program
 from running. If failure is normal, the called code will respond in a way that can be handled by the calling code in the normal course of events.
 
-No-progress errors mean your code cannot make meaningful progress. This situation usually requires reporting to make sure someone is awar eof the situation so that it can be retified. The user may also be
+No-progress errors mean your code cannot make meaningful progress. This situation usually requires reporting to make sure someone is aware of the situation so that it can be rectified. The user may also be
 informed as a lack of progress may affect them.
 
 For the happy path, the called code is a black box. You request the code to do something, it succeeds, and you get an appropriate result.
 
-However, when considering failure, the called code is not a black box. Called code reports reveals information within the black box, which is usually required so that the calling code can respond to the
+However, when considering failure, the called code is not a black box. Failure reports reveal information within the black box. This is usually required so that the calling code can respond to the
 error. The detail may show that a remote system is not responding or that a disk write failed. This reveals information on how the black box works.
 
-The called code is communicating, "I have failed because I cannot handle this case, and you need to know about it."
+The code is communicating, "I have failed because I cannot handle this case, and you need to know about it."
 
-However, there is a fundamental difference between code being made aware of an error and the code being in a position to successfully resolve it. The former is easy, the latter is hugely non-trivial.
+However, there is a fundamental difference between code being made aware of an error and the code being able to successfully resolve it. The former is easy; the latter is hugely non-trivial.
 
 It may make sense that knowledge of the failure is passed on. The calling code returns the failure detail to some other part of the application, the thinking being that code elsewhere can more
 appropriately respond to the issue.
 
-Importantly, noting that an error has occurred is not the same thing as rectifying the situation so that the error will not happen next time. Noting an error just records that it happened. But, in the
-complex systems of today, that is usually all that can be done.
+Importantly, noting that an error has occurred is not the same thing as rectifying the situation so that the error will not happen next time. Noting an error records that it happened. But, in the
+complex systems of today that is usually all that can be done.
 
 This is because the failure occurs outside your program, in an external resource.
 
 External systems may fail for any number of reasons. If a call to write to a disk fails, how to address that issue is well beyond the capabilities of the calling code. Your code is designed to solve
-some other problem, and is not designed to be involved in rectifying issues in the infrastructure required to enable your code to run. Therefore, in such a system, when a failure does arise, it is
-reasonable that the only response is to log the issue and move on. In this way, the code should be able to tolerate the issue, but not get involved in error repair. This is because to repair the error in
-this case, your code would first of all have to know how to diagnose the issue (the disk might be full, it might be marked read-only, or it might be one of a hundred other things), and once successfully
-diagnosed, have a working remedy put into place, such that, a subsequent write would then work.
+some other problem and is not designed to be involved in rectifying issues in the infrastructure required to enable your code to run. Therefore, in such a system, when a failure does arise, it is
+reasonable that the only response is to log the issue and move on. In this way, the code should be able to tolerate the issue but not get involved in error repair. This is because to repair the error in
+this case, your code would, first of all, have to know how to diagnose the issue (the disk might be full, it might be marked read-only, or it might be one of a hundred other things), and once successfully
+diagnosed, have a working remedy put into place, such that, a subsequent write would then work. Both of these are non-trivial.
 
-Some errors are transitory, and here the calling code can tolerate such issues. For example, if your code is running on a mobile device that is currently out of network
-range, any attempt to contact a remote service will fail. However, the device may move within range at any time so re-trying the call *may* make sense in such circumstances. A detailed appreciation of the
-likely caues of failure in such a system (a failure model) is needed so that the code can be designed to react well to the realities it will face. Note, in this case, the code running on the mobile device is
-just re-trying the call, in the hope that the underlying cause was only temporary. The code is not making an attempt to ensure a signal is available - that is not possible.
+Some errors are transitory, and here, the calling code can tolerate such issues so that useful progress can be made. For example, if your code is running on a mobile device that is currently out of network
+range, any attempt to contact a remote service will fail. However, the device may move within range at any time, so re-trying the call *may* make sense in such circumstances. A detailed appreciation of the
+likely cause of failure in such a system (a failure model) is needed so that the code can be designed to react well to the realities it will face. Note, in this case, the code running on the mobile device is
+just re-trying the call in the hope that the underlying cause was only temporary. The code is not making an attempt to ensure a signal is available - that is not possible.
 
 What we see is that a program's ability to tolerate failure depends on the nature of that failure.
 
