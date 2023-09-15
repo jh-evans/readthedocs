@@ -45,6 +45,8 @@ A process-wide failure is more serious. A failure occurs that causes your whole 
 The lines between failure types are not always clear. Without access to the remote service, your program may correctly execute but is unable to achieve anything useful until the service is back.  Until
 that happens, your program has effectively failed process-wide. It is not providing any value and may as well not be running.
 
+<in general, failures that are not process-wide should all be tolerated such that your code can make useful progress>. Expand on this.
+
 Where in code to Respond to Failure
 -----------------------------------
 
